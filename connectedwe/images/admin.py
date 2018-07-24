@@ -4,18 +4,45 @@ from . import models
 # Register your models here.
 @admin.register(models.Image)
 class ImageAdmin(admin.ModelAdmin):
+    
+    search_fields = (
+        "location",
+        "creator"
+    )
 
-    pass
+    list_display = (
+        'created_at',
+        'updated_at',
+        'file',
+        'location',
+        'caption',
+        'creator',
+    )
 
 
 @admin.register(models.Comment)
 class CommentAdmin(admin.ModelAdmin):
     
-    pass
+    search_fields = ['creator']
+    
+    list_display = (
+        'created_at',
+        'updated_at',
+        'message',
+        'creator',
+        'image',
+    )
 
 @admin.register(models.Like)
 class LikeAdmin(admin.ModelAdmin):
-    pass
-
     
+    search_fields=['creator']
+    list_display = (
+        'created_at',
+        'updated_at',
+        'creator',
+        'image',
+    )
+
+
 
