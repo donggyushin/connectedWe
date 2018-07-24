@@ -13,7 +13,7 @@ class TimeStampedModel(models.Model):
 
 class Image(TimeStampedModel):
 
-    file = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    file = models.ImageField()
     location = models.CharField( max_length=140)
     caption = models.TextField()
     creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True)
