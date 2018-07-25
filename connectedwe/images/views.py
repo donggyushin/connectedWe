@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from . import models, serializers
 
 # Create your views here.
 
+
+# Feed 불러오기, 내가 팔로잉한 사람들의 피드를 5개씩 끊어서 불러올 수 있다. 
+# 정렬 순서는 시간순의 역순으로
 class Feed(APIView):
 
     def get(self, request, format=None):
@@ -17,14 +21,14 @@ class Feed(APIView):
 
         for following_user in following_users:
             
-            following_users_images = following_user.image_set.all()[:2]
+            following_users_images = following_user.image_set.all()[:5]
 
             for following_users_image in following_users_images:
                 
                 following_images.append(following_users_image)
 
 
-        user_images = user.image_set.all()[:2]
+        user_images = user.image_set.all()[:5]
 
         for user_image in user_images:
 
@@ -36,9 +40,60 @@ class Feed(APIView):
 
         serializer = serializers.ImageSerializer(sorted_follwoing_images, many=True)
 
-        return Response(data=serializer.data)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 def get_key(image):
 
     return image.created_at
+
+
+
+#좋아요 누르기. 
+#중복된 좋아요 누르면 status=404 반환
+
+class LikeImage(APIView):
+
+    def get(self, request,image_id,  format=None):
+
+        foundImage = models.Image.objects.get(id=image_id)
+
+        try:
+            already_like = models.Like.objects.get(
+                creator = request.user,
+                image = foundImage
+            )
+
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except models.Like.DoesNotExist:
+            
+            new_like = models.Like.objects.create(
+                creator = request.user,
+                image = foundImage
+            )
+            
+
+            new_like.save()
+
+            return Response(status=status.HTTP_200_OK)
+
+class UnlikeImage(APIView):
+
+    def delete(self, request, image_id, format=None):
+        
+        try:
+        
+            foundLike = models.Like.objects.get(
+            creator = request.user,
+            image = models.Image.objects.get(id=image_id)
+             )
+        except models.Like.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+
+        foundLike.delete()
+
+
+        
+
+        return Response(status=status.HTTP_200_OK)

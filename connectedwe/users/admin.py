@@ -20,6 +20,7 @@ class UserAdmin(auth_admin.UserAdmin):
         'gender',
         'followers',
         'following',
+        'profile_image',
     )}),) + auth_admin.UserAdmin.fieldsets
     list_display = ["username", "name", "is_superuser"]
     search_fields = ["name"]

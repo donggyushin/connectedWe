@@ -19,10 +19,11 @@ class User(AbstractUser):
     name = CharField(_("Name of User"), blank=True, max_length=255)
     website = models.URLField(_("webiste"), max_length=200, null=True, blank=True)
     bio = models.TextField(_("bio"), null=True, blank=True)
-    phone = models.CharField(_("phone"), max_length=50, blank=True)
+    phone = models.CharField(_("phone"), max_length=50, blank=True, null=True)
     gender = models.CharField(_("gender"), max_length=50, choices=GENDER_CHOICES, null=True)
     followers = models.ManyToManyField("self", blank=True)
     following = models.ManyToManyField("self", blank=True)
+    profile_image = models.ImageField(_("profile_image"), max_length=None, null=True, blank=True)
     #image_set
 
     def get_absolute_url(self):
