@@ -17,6 +17,7 @@ class Image(TimeStampedModel):
     location = models.CharField( max_length=140)
     caption = models.TextField()
     creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True)
+    
 
     def __str__(self):
         return "{} - {}".format(self.location, self.caption)

@@ -19,8 +19,13 @@ urlpatterns = [
         "users/",
         include("connectedwe.users.urls", namespace="users"),
     ),
+    
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path(
+        "images/",
+        include("connectedwe.images.urls", namespace="images"),
+    ),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )
