@@ -17,12 +17,12 @@ class User(AbstractUser):
     # First Name and Last Name do not cover name patterns
     # around the globe.
     name = CharField(_("Name of User"), blank=True, max_length=255)
-    website = models.URLField(_("webiste"), max_length=200, null=True)
-    bio = models.TextField(_("bio"), null=True)
-    phone = PhoneNumberField(_("phone"), null=True)
+    website = models.URLField(_("webiste"), max_length=200, null=True, blank=True)
+    bio = models.TextField(_("bio"), null=True, blank=True)
+    phone = models.CharField(_("phone"), max_length=50, blank=True)
     gender = models.CharField(_("gender"), max_length=50, choices=GENDER_CHOICES, null=True)
-    followers = models.ManyToManyField("self")
-    following = models.ManyToManyField("self")
+    followers = models.ManyToManyField("self", blank=True)
+    following = models.ManyToManyField("self", blank=True)
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})

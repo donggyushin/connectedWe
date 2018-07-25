@@ -68,7 +68,8 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
-    'phonenumber_field',
+    'phonenumber_field', 
+    'rest_framework',   #Rest Framework
 ]
 LOCAL_APPS = [
     'connectedwe.users.apps.UsersAppConfig',
