@@ -23,6 +23,7 @@ class User(AbstractUser):
     gender = models.CharField(_("gender"), max_length=50, choices=GENDER_CHOICES, null=True)
     followers = models.ManyToManyField("self", blank=True)
     following = models.ManyToManyField("self", blank=True)
+    #image_set
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})

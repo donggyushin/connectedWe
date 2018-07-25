@@ -20,7 +20,7 @@ class Image(TimeStampedModel):
     
 
     def __str__(self):
-        return "{} - {}".format(self.location, self.caption)
+        return "{} - {} - {}".format(self.location, self.caption, self.creator)
     
 
 

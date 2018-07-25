@@ -5,30 +5,40 @@ from . import models, serializers
 
 # Create your views here.
 
-class ListAllImages(APIView):
-    
-    def get(self, request, format=None):
-        
-        all_images = models.Image.objects.all()
-
-        serializer = serializers.ImageSerializer(all_images, many=True)
-
-        return Response(data=serializer.data)
-
-class ListAllComments(APIView):
+class Feed(APIView):
 
     def get(self, request, format=None):
 
-        all_comments = models.Comment.objects.all()
-        serializer = serializers.CommentSerializer(all_comments, many=True)
+        user = request.user
+        #내가 팔로잉하고 있는 모든 유저들 부르기 
+        following_users = user.following.all()
+
+        following_images = []
+
+        for following_user in following_users:
+            
+            following_users_images = following_user.image_set.all()[:2]
+
+            for following_users_image in following_users_images:
+                
+                following_images.append(following_users_image)
+
+
+        user_images = user.image_set.all()[:2]
+
+        for user_image in user_images:
+
+            following_images.append(user_image)
+
+
+
+        sorted_follwoing_images = sorted(following_images, key=get_key, reverse=True)
+
+        serializer = serializers.ImageSerializer(sorted_follwoing_images, many=True)
+
         return Response(data=serializer.data)
 
-class ListAllLikes(APIView):
 
-    def get(self, request, format=None):
+def get_key(image):
 
-        all_likes = models.Like.objects.all()
-        serializer = serializers.LikeSerializer(all_likes, many=True)
-        return Response(data=serializer.data)
-
-        
+    return image.created_at
