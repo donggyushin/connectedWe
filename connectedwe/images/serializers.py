@@ -5,12 +5,17 @@ from . import models
 
 class CommentSerializer(serializers.ModelSerializer):
 
-    creator = userSerializers.UserSerializer()
+    creator = userSerializers.UserSerializer(read_only=True)
+
 
     class Meta:
 
         model = models.Comment
-        fields = '__all__'
+        fields = (
+            'id',
+            'message',
+            'creator',
+        )
 
 
 class LikeSerializer(serializers.ModelSerializer):

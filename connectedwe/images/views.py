@@ -97,3 +97,21 @@ class UnlikeImage(APIView):
         
 
         return Response(status=status.HTTP_200_OK)
+
+#이미지에 댓글 달기
+class CommentOnImage(APIView):
+
+    def post(self, request,  image_id,format=None):
+        
+        
+
+        serializer = serializers.CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(creator = request.user , image = models.Image.objects.get(id=image_id))
+        else :
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(data=serializer.data ,status=status.HTTP_200_OK)
+        
+        
+        
