@@ -136,13 +136,3 @@ class ProfileView(APIView):
 
         return Response(data=serializered.data,status=status.HTTP_200_OK)
 
-
-class onlyForTest(APIView):
-
-    def get(self, request, format=None):
-        
-        user = request.user
-
-        serializered = serializers.UserSerializers(user)
-
-        return Response(data=serializered.data,status=status.HTTP_200_OK)

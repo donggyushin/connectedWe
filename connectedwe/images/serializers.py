@@ -1,6 +1,18 @@
 from rest_framework import serializers
-from connectedwe.users import serializers as user_serializers
+from connectedwe.users import models as user_models
 from . import models
+
+class BasicUserSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        
+        model = user_models.User
+        fields = (
+            'id',
+            'username',
+            'name',
+            'profile_image',
+        )
 
 
 
@@ -8,12 +20,11 @@ from . import models
 class LikeSerializer(serializers.ModelSerializer):
     
 
-
-
-
     class Meta:
         model = models.Like
         fields = '__all__'
+
+
 class CommentSerializer(serializers.ModelSerializer):
     
 
@@ -33,7 +44,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
     comment_set = CommentSerializer(many=True)
     like_set = LikeSerializer(many=True)
-    creator = user_serializers.UserSerializers()
+    creator = BasicUserSerializer()
 
     class Meta:
 
@@ -49,14 +60,6 @@ class ImageSerializer(serializers.ModelSerializer):
             'like_set',
         )
 
-class SingleImageSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        
-        model= models.Image
-        fields = (
-            'file',
-        )
 
 
 

@@ -12,7 +12,6 @@ app_name = "users"
 urlpatterns = [
     path("", view=user_list_view, name="list"),
     path("explore/", views.UserView.as_view(), name="explore_user"),
-    path("test/", views.onlyForTest.as_view(), name="test"),
     path("new/", views.CreateNewUser.as_view(), name="create_new_user"),
     path("~redirect/", view=user_redirect_view, name="redirect"),
     path("~update/", view=user_update_view, name="update"),
