@@ -26,6 +26,10 @@ urlpatterns = [
         "images/",
         include("connectedwe.images.urls", namespace="images"),
     ),
+    path(
+        "notifications/",
+        include("connectedwe.notifications.urls", namespace="notifications"),
+    ),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )
