@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from . import models, serializers
+from connectedwe.images import serializers as image_serializers
 
 User = get_user_model()
 
@@ -136,3 +137,37 @@ class ProfileView(APIView):
 
         return Response(data=serializered.data,status=status.HTTP_200_OK)
 
+class GetFollowersList(APIView):
+
+    def get(self, request, format=None):
+        
+        me = request.user
+        
+        #우선 먼저 나의 followers들을 다 불러보자 
+        my_followers = me.followers.all()
+        serializered = image_serializers.BasicUserSerializer(my_followers, many=True)
+
+        return Response(data=serializered.data ,status=status.HTTP_200_OK)
+
+class GetFollowingList(APIView):
+
+    def get(self, request, format=None):
+
+        me = request.user
+
+        my_followings = me.following.all()
+        serializered = image_serializers.BasicUserSerializer(my_followings, many=True)
+
+        return Response(data=serializered.data, status=status.HTTP_200_OK)
+
+class SearchByUsername(APIView):
+
+    def get(self, request, format=None):
+        
+        username = request.query_params.get("username")
+
+        users_to_find = models.User.objects.filter(username__istartswith=username)
+        serializered = image_serializers.BasicUserSerializer(users_to_find, many=True)
+
+
+        return Response(data = serializered.data,status=status.HTTP_200_OK)

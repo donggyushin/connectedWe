@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from . import models, serializers
 from connectedwe.users import models as user_models
+from connectedwe.users import serializers as user_serializers
 
 # Create your views here.
 
@@ -130,6 +131,18 @@ class CommentView(APIView):
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class SearchByHashtags(APIView):
+    
+    def get(self, request, format=None):
         
+        hashtags = request.query_params.get('hashtags', None)
+        hashtags = hashtags.split(",")
+        #hashtags로 걸러진 image들
+        images_to_find = models.Image.objects.filter(hashtags__name__in=hashtags).distinct()
+        serializered = user_serializers.SingleImageSerializers(images_to_find, many=True)
+
+        return Response(data=serializered.data,status=status.HTTP_200_OK)
         
         

@@ -1,5 +1,6 @@
 from django.db import models
 from connectedwe.users import models as user_models
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class TimeStampedModel(models.Model):
@@ -19,6 +20,7 @@ class Image(TimeStampedModel):
     location = models.CharField( max_length=140)
     caption = models.TextField()
     creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True)
+    hashtags = TaggableManager(blank=True)
     
 
     def __str__(self):

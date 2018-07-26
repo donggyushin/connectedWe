@@ -31,6 +31,7 @@ django-extensions = "==2.1.0"
 django_coverage_plugin = "==1.5.0"
 pytest-django = "==3.3.2"
 django-phonenumber-field = "*"
+django-taggit = "*"
 
 [dev-packages]
 

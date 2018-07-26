@@ -5,6 +5,7 @@ app_name = "images"
 
 urlpatterns = [
     path("", view=views.ImageView.as_view(), name="Feed"),
+    path("search/", views.SearchByHashtags.as_view(), name="searchByHashtags"),
     path("<int:image_id>/like/", view=views.LikeView.as_view(), name="likeImage"),
     path("<int:image_id>/unlike/", view=views.LikeView.as_view(), name="unlikeImage"),
     path("<int:image_id>/comment/", views.CommentView.as_view(), name="comment_on_image"),
