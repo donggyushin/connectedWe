@@ -10,7 +10,7 @@ from connectedwe.users import models as user_models
 
 # Feed 불러오기, 내가 팔로잉한 사람들의 피드를 5개씩 끊어서 불러올 수 있다. 
 # 정렬 순서는 시간순의 역순으로
-class Feed(APIView):
+class ImageView(APIView):
 
     def get(self, request, format=None):
 
@@ -53,7 +53,7 @@ def get_key(image):
 #좋아요 누르기. 
 #중복된 좋아요 누르면 status=404 반환
 
-class LikeImage(APIView):
+class LikeView(APIView):
 
     def get(self, request,image_id,  format=None):
 
@@ -78,44 +78,24 @@ class LikeImage(APIView):
 
             return Response(status=status.HTTP_200_OK)
 
-class UnlikeImage(APIView):
-
     def delete(self, request, image_id, format=None):
-        
+
         try:
-        
+
             foundLike = models.Like.objects.get(
-            creator = request.user,
-            image = models.Image.objects.get(id=image_id)
-             )
+                creator=request.user,
+                image=models.Image.objects.get(id=image_id)
+            )
         except models.Like.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
 
         foundLike.delete()
 
-
-        
-
         return Response(status=status.HTTP_200_OK)
 
-#이미지에 댓글 달기
-class CommentOnImage(APIView):
 
-    def post(self, request,  image_id,format=None):
-        
-        
 
-        serializer = serializers.CommentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(creator = request.user , image = models.Image.objects.get(id=image_id))
-        else :
-            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-            
-
-        return Response(data=serializer.data ,status=status.HTTP_200_OK)
-
+    
 
 #댓글 관련 View
 class CommentView(APIView):
@@ -140,6 +120,16 @@ class CommentView(APIView):
         
         #댓글은 존재하나, 본인의 댓글이 아닐 경우 권한이 없음
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    def post(self, request,  image_id, format=None):
+
+        serializer = serializers.CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(creator=request.user, image=models.Image.objects.get(id=image_id))
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
         
         
         
