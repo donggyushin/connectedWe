@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from . import models, serializers
+from connectedwe.users import models as user_models
 
 # Create your views here.
 
@@ -111,7 +112,34 @@ class CommentOnImage(APIView):
         else :
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+            
+
         return Response(data=serializer.data ,status=status.HTTP_200_OK)
+
+
+#댓글 관련 View
+class CommentView(APIView):
+    #댓글 삭제하기
+    def delete (self, request, comment_id,format=None):
+        
+        
+        
+        try:
+            #해당 댓글 불러오기 
+            comment_to_delete = models.Comment.objects.get(id=comment_id)
+            #해당 불러온 댓글이 user 가 쓴 댓글이 맞는지 확인하기
+            if comment_to_delete.creator.id == request.user.id:
+                #만약에 동일한 유저가 맞다면 삭제해주기
+                comment_to_delete.delete()
+                return Response(status=status.HTTP_200_OK)
+            #comment_to_delete.delete()
+        except models.Comment.DoesNotExist:
+            #찾지 못하였을경우
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        
+        #댓글은 존재하나, 본인의 댓글이 아닐 경우 권한이 없음
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
         
         
         

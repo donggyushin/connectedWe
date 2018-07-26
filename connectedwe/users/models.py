@@ -24,7 +24,13 @@ class User(AbstractUser):
     followers = models.ManyToManyField("self", blank=True)
     following = models.ManyToManyField("self", blank=True)
     profile_image = models.ImageField(_("profile_image"), max_length=None, null=True, blank=True)
+    password1 = models.CharField(_("password1"), max_length=50, null=True)
+    password2 = models.CharField(_("password2"), max_length=50, null=True)
     #image_set
+
+    class Meta:
+        
+        ordering = ['-date_joined']
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})

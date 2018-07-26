@@ -10,4 +10,5 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             'username',
             'profile_image',
+            'name',
         )

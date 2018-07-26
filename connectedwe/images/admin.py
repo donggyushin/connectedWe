@@ -26,6 +26,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ['creator']
     
     list_display = (
+        'id',
         'created_at',
         'updated_at',
         'message',
