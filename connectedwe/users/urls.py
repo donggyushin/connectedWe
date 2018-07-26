@@ -12,12 +12,15 @@ app_name = "users"
 urlpatterns = [
     path("", view=user_list_view, name="list"),
     path("explore/", views.UserView.as_view(), name="explore_user"),
+    path("test/", views.onlyForTest.as_view(), name="test"),
     path("new/", views.CreateNewUser.as_view(), name="create_new_user"),
     path("~redirect/", view=user_redirect_view, name="redirect"),
     path("~update/", view=user_update_view, name="update"),
     path("<str:username>/", view=user_detail_view, name="detail"),
+    path("<int:user_id>/profile/", views.ProfileView.as_view(), name="user_profile"),
     path("<int:user_id>/follow/", views.FollowView.as_view(), name="follow_user"),
-    path("<int:user_id>/unfollow/", views.FollowView.as_view(), name="unfollow_user")
+    path("<int:user_id>/unfollow/", views.FollowView.as_view(), name="unfollow_user"),
+    
     
 ]
 

@@ -5,7 +5,7 @@ from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from . import serializers, models
+from . import models, serializers
 
 User = get_user_model()
 
@@ -123,3 +123,26 @@ class FollowView(APIView):
         user.following.remove(user_to_unfollow)
         user_to_unfollow.followers.remove(user)
         return Response(status=status.HTTP_200_OK)
+
+class ProfileView(APIView):
+
+    def get(self, request, user_id, format=None):
+        
+        try:
+            user_to_find = models.User.objects.get(id=user_id)
+        except models.User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializered = serializers.UserProfileSerializer(user_to_find)
+
+        return Response(data=serializered.data,status=status.HTTP_200_OK)
+
+
+class onlyForTest(APIView):
+
+    def get(self, request, format=None):
+        
+        user = request.user
+
+        serializered = serializers.UserSerializers(user)
+
+        return Response(data=serializered.data,status=status.HTTP_200_OK)
