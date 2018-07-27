@@ -83,7 +83,7 @@ class LikeView(APIView):
             #notification = 'like'
             #image = foundImage
             notifications_views.create_notifications(request.user, foundImage.creator, 'like', foundImage)
-            
+
 
             return Response(status=status.HTTP_200_OK)
 
@@ -160,5 +160,25 @@ class SearchByHashtags(APIView):
         serializered = user_serializers.SingleImageSerializers(images_to_find, many=True)
 
         return Response(data=serializered.data,status=status.HTTP_200_OK)
+
+
+#내 이미지에 달린 댓글 지우기
+class DeleteCommentOnMyImage(APIView):
+    
+    def delete(self, request,comment_id ,format=None):
+        
+        me = request.user
+        
+
+        comment = models.Comment.objects.get(id=comment_id)
+        ImageFound = comment.image
+        
+        if ImageFound.creator == me :
+            
+            comment.delete()
+        else :
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response(status=status.HTTP_200_OK)
         
         
