@@ -5,6 +5,7 @@ from rest_framework import status
 from . import models, serializers
 from connectedwe.users import models as user_models
 from connectedwe.users import serializers as user_serializers
+from connectedwe.notifications import views as notifications_views
 
 # Create your views here.
 
@@ -76,6 +77,13 @@ class LikeView(APIView):
             
 
             new_like.save()
+            #create_notifications(creator, to, notification_type, image = None):
+            #creator = request.user
+            #to = foundImage.creator
+            #notification = 'like'
+            #image = foundImage
+            notifications_views.create_notifications(request.user, foundImage.creator, 'like', foundImage)
+            
 
             return Response(status=status.HTTP_200_OK)
 
@@ -123,12 +131,20 @@ class CommentView(APIView):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def post(self, request,  image_id, format=None):
+        
 
         serializer = serializers.CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(creator=request.user, image=models.Image.objects.get(id=image_id))
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        image = models.Image.objects.get(id=image_id)
+
+        #create_notifications(creator, to, notification_type, image = None):
+   
+        notifications_views.create_notifications(request.user, image.creator, 'comment', image=image)
+        
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 

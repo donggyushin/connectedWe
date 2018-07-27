@@ -50,6 +50,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
         model = models.Image
         fields = (
+            'id',
             'created_at',
             'updated_at',
             'file',
