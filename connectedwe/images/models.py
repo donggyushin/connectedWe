@@ -1,6 +1,7 @@
 from django.db import models
 from connectedwe.users import models as user_models
 from taggit.managers import TaggableManager
+from django.contrib.humanize.templatetags.humanize import naturaltime
 
 # Create your models here.
 class TimeStampedModel(models.Model):
@@ -21,6 +22,21 @@ class Image(TimeStampedModel):
     caption = models.TextField()
     creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True)
     hashtags = TaggableManager(blank=True)
+
+    @property
+    def like_count(self):
+        
+        return self.like_set.all().count()
+
+    @property
+    def naturalTime(self):
+        
+        return naturaltime(self.created_at)
+
+    @property
+    def comment_count(self):
+        
+        return self.comment_set.all().count()
     
 
     def __str__(self):

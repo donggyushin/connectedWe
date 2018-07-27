@@ -22,7 +22,11 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Like
-        fields = '__all__'
+        fields = (
+            'id',
+            'creator',
+            'image',
+        )
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -43,7 +47,7 @@ class ImageSerializer(serializers.ModelSerializer):
     
 
     comment_set = CommentSerializer(many=True)
-    like_set = LikeSerializer(many=True)
+
     creator = BasicUserSerializer()
 
     class Meta:
@@ -51,17 +55,57 @@ class ImageSerializer(serializers.ModelSerializer):
         model = models.Image
         fields = (
             'id',
-            'created_at',
+            'naturalTime',
             'updated_at',
             'file',
             'location',
             'caption',
             'creator',
             'comment_set',
-            'like_set',
+            'like_count',
+            'comment_count',
+        )
+class SingleImageSerializer(serializers.ModelSerializer):
+    
+    comment_set = CommentSerializer(many=True)
+    creator = BasicUserSerializer()
+    
+    class Meta:
+        
+        model = models.Image
+        fields = (
+            'id',
+            'file',
+            'caption',
+            'like_count',
+            'naturalTime',
+            'comment_set',
+            'creator',
+            'comment_count'
+        )
+
+class LikeListSerializer(serializers.ModelSerializer):
+    
+    creator = BasicUserSerializer()
+    
+    class Meta:
+        
+        model = models.Like
+        fields = (
+            'id',
+            'creator',
         )
 
 
 
-
+class EditImageSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = models.Image
+        fields= (
+            'id',
+            'caption',
+            'location',
+            'file',
+        )
 

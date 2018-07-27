@@ -22,6 +22,8 @@ urlpatterns = [
     path("<int:user_id>/profile/", views.ProfileView.as_view(), name="user_profile"),
     path("<int:user_id>/follow/", views.FollowView.as_view(), name="follow_user"),
     path("<int:user_id>/unfollow/", views.FollowView.as_view(), name="unfollow_user"),
+    path("<int:user_id>/edit/", views.ProfileView.as_view(), name="edit_user_profile"),
+    path("<int:user_id>/password/", views.PasswordView.as_view(), name="edit_password"),
     
     
 ]

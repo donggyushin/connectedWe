@@ -8,6 +8,7 @@ from rest_framework import status
 from . import models, serializers
 from connectedwe.images import serializers as image_serializers
 from connectedwe.notifications import views as notifications_views
+from connectedwe.images import models as image_models
 
 User = get_user_model()
 
@@ -142,6 +143,26 @@ class ProfileView(APIView):
 
         return Response(data=serializered.data,status=status.HTTP_200_OK)
 
+    def put(self, request, user_id, format=None):
+        
+        me = request.user
+
+        if me.id != user_id:
+            
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        serializered = serializers.EditUserProfileSerializer(me, data= request.data, partial=True)
+
+        if serializered.is_valid():
+            
+            serializered.save()
+        else :
+            
+            return Response(data=serializered.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
+        return Response(data=serializered.data,status=status.HTTP_200_OK)
+
 class GetFollowersList(APIView):
 
     def get(self, request, format=None):
@@ -176,3 +197,32 @@ class SearchByUsername(APIView):
 
 
         return Response(data = serializered.data,status=status.HTTP_200_OK)
+
+class PasswordView(APIView):
+    
+    def put(self, request, user_id,format=None):
+        
+        me = request.user
+        if me.id != user_id:
+            
+            print("asdasdasd")
+            
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+
+        match = me.check_password(current_password)
+
+        if match == False:
+            
+            print("권한없음")
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
+        me.set_password(new_password)
+        me.save()
+        
+
+        return Response(status=status.HTTP_200_OK)
+
+

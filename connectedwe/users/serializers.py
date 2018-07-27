@@ -29,3 +29,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'image_set'
         )
         
+class EditUserProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = models.User
+        fields = (
+            
+            'bio',
+            'website',
+            'profile_image',
+
+        )

@@ -180,5 +180,58 @@ class DeleteCommentOnMyImage(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         return Response(status=status.HTTP_200_OK)
+
+
+class SingleImageView(APIView):
+    
+    def get(self, request,image_id ,format=None):
+        
+        singlePhoto = models.Image.objects.get(id=image_id)
+        serializered = serializers.SingleImageSerializer(singlePhoto)
         
         
+        return Response(data=serializered.data,status=status.HTTP_200_OK)
+
+    def put(self, request, image_id, format=None):
+        
+        image_to_edit = models.Image.objects.get(id=image_id)
+        me = request.user
+        image_creator = image_to_edit.creator
+        if me != image_creator:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        
+        serializered = serializers.EditImageSerializer(image_to_edit, data=request.data, partial=True)
+        
+
+        if serializered.is_valid():
+            
+            serializered.save()
+        else :
+            return Response(data= serializered.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(data=serializered.data,status=status.HTTP_200_OK)
+
+    def delete(self, request, image_id, format=None):
+        
+        image_to_delete = models.Image.objects.get(id=image_id)
+        image_creator = image_to_delete.creator
+        me = request.user
+
+        if me != image_creator:
+            
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        image_to_delete.delete()
+        
+        return Response(status=status.HTTP_200_OK)
+        
+class LikeListView(APIView):
+
+    def get(self, request, image_id, format=None):
+        
+        ImageFound = models.Image.objects.get(id=image_id)
+        like_list = models.Like.objects.filter(image=ImageFound)
+        serializered = serializers.LikeListSerializer(like_list, many=True)
+
+        return Response(data=serializered.data,status=status.HTTP_200_OK)
