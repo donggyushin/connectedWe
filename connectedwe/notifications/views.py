@@ -18,3 +18,16 @@ class NotificationsView(APIView):
         
 
         return Response(data=serializered.data,status=status.HTTP_200_OK)
+
+
+def create_notifications(creator, to, notification_type, image = None):
+
+    new_notification = models.Notification.objects.create(
+        creator = creator,
+        to = to,
+        notification_types = notification_type,
+        image = image
+    )
+
+    new_notification.save()
+

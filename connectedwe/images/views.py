@@ -56,7 +56,7 @@ def get_key(image):
 
 class LikeView(APIView):
 
-    def get(self, request,image_id,  format=None):
+    def post(self, request,image_id,  format=None):
 
         foundImage = models.Image.objects.get(id=image_id)
 

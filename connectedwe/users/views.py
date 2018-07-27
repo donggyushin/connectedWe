@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from . import models, serializers
 from connectedwe.images import serializers as image_serializers
+from connectedwe.notifications import views as notifications_views
 
 User = get_user_model()
 
@@ -93,7 +94,7 @@ class UserView(APIView):
 class FollowView(APIView):
     
     #follow 하기
-    def get(self, request, user_id, format=None):
+    def post(self, request, user_id, format=None):
         
         user = request.user
         #follow할 유저 찾기
@@ -105,22 +106,26 @@ class FollowView(APIView):
 
         #following에 추가해주기. 
         user.following.add(user_to_follow)
-
         #그리고 user가 다른 user를 following 하면 following 당하는 user의
         #follower에 following을 요청한 user 가 들어가야함. 
         user_to_follow.followers.add(user)
+        #알림생성해주기. 
+        #create_notifications(creator, to, notification_type, image = None)
+        notifications_views.create_notifications(user, user_to_follow, 'follow')
 
         return Response(status=status.HTTP_200_OK)
 
     #unfollow 하기
     def delete(self, request, user_id, format=None):
-        
+        #본인
         user = request.user
-        try:
+        try:#언팔할 유저
             user_to_unfollow = models.User.objects.get(id=user_id)
         except models.User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
+        #본인의 following 에서 언팔할 유저만 지움. 근데
+        #이렇게하니까 user_toUnfollow의 following에서 user 객체까지 사라져버림..
+        #
         user.following.remove(user_to_unfollow)
         user_to_unfollow.followers.remove(user)
         return Response(status=status.HTTP_200_OK)

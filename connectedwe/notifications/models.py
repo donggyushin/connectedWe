@@ -29,5 +29,9 @@ class Notification(TimeStampledModel):
 
     def __str__(self):
         return "{} {} {}".format(self.creator, self.to, self.notification_types)
+
+    class Meta:
+        
+        ordering = ['-created_at']
     
     
