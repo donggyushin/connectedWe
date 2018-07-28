@@ -6,6 +6,7 @@ app_name = "images"
 urlpatterns = [
     path("", view=views.ImageView.as_view(), name="Feed"),
     path("search/", views.SearchByHashtags.as_view(), name="searchByHashtags"),
+    path("upload/", views.ImageView.as_view(), name="upload_image"),
     path("<int:image_id>/single/", views.SingleImageView.as_view(), name="get_single_photo"),
     path("<int:image_id>/edit/", views.SingleImageView.as_view(), name="edit_single_image"),
     path("<int:image_id>/delete/", views.SingleImageView.as_view(), name="delete_single_image"),

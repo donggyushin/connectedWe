@@ -9,8 +9,17 @@ from . import models, serializers
 from connectedwe.images import serializers as image_serializers
 from connectedwe.notifications import views as notifications_views
 from connectedwe.images import models as image_models
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
+
+
+
 
 User = get_user_model()
+
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):

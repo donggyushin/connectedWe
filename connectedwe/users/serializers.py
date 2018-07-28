@@ -26,7 +26,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'bio',
             'website',
             'profile_image',
-            'image_set'
+            'image_set',
+            'following_count',
+            'followers_count',
+            'images_count',
         )
         
 class EditUserProfileSerializer(serializers.ModelSerializer):
@@ -35,7 +38,7 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
 
         model = models.User
         fields = (
-            
+            'id',
             'bio',
             'website',
             'profile_image',

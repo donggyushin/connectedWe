@@ -46,6 +46,20 @@ class ImageView(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+    def post(self, request, format=None):
+        me = request.user
+
+        image_to_upload = request.data
+        serializered = serializers.EditImageSerializer(data=image_to_upload)
+
+        if serializered.is_valid():
+            serializered.save(creator=me)
+        else :
+            return Response(data = serializered.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(data = serializered.data,status=status.HTTP_200_OK)
+
+
 def get_key(image):
 
     return image.created_at

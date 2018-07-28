@@ -28,6 +28,23 @@ class User(AbstractUser):
     password2 = models.CharField(_("password2"), max_length=50, null=True)
     #image_set
 
+
+
+    @property
+    def following_count(self):
+        
+        return self.following.all().count()
+
+    @property
+    def followers_count(self):
+        
+        return self.followers.all().count()
+
+    @property
+    def images_count(self):
+        
+        return self.image_set.all().count()
+
     class Meta:
         
         ordering = ['-date_joined']

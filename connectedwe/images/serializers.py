@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from connectedwe.users import models as user_models
 from . import models
+from taggit_serializer.serializers import (TagListSerializerField,
+                                           TaggitSerializer)
 
 class BasicUserSerializer(serializers.ModelSerializer):
     
@@ -47,7 +49,7 @@ class ImageSerializer(serializers.ModelSerializer):
     
 
     comment_set = CommentSerializer(many=True)
-
+    hashtags = TagListSerializerField()
     creator = BasicUserSerializer()
 
     class Meta:
@@ -64,11 +66,13 @@ class ImageSerializer(serializers.ModelSerializer):
             'comment_set',
             'like_count',
             'comment_count',
+            'hashtags'
         )
 class SingleImageSerializer(serializers.ModelSerializer):
     
     comment_set = CommentSerializer(many=True)
     creator = BasicUserSerializer()
+    hashtags = TagListSerializerField()
     
     class Meta:
         
@@ -81,7 +85,8 @@ class SingleImageSerializer(serializers.ModelSerializer):
             'naturalTime',
             'comment_set',
             'creator',
-            'comment_count'
+            'comment_count',
+            'hashtags'
         )
 
 class LikeListSerializer(serializers.ModelSerializer):

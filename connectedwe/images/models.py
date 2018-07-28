@@ -18,8 +18,8 @@ class TimeStampedModel(models.Model):
 class Image(TimeStampedModel):
 
     file = models.ImageField()
-    location = models.CharField( max_length=140)
-    caption = models.TextField()
+    location = models.CharField( max_length=140, blank=True)
+    caption = models.TextField(blank= True)
     creator = models.ForeignKey(user_models.User, on_delete=models.CASCADE, null=True)
     hashtags = TaggableManager(blank=True)
 
