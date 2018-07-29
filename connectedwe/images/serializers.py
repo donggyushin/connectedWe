@@ -30,10 +30,20 @@ class LikeSerializer(serializers.ModelSerializer):
             'image',
         )
 
+class creatorSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        
+        model = user_models.User
+        fields = (
+            'id',
+            'username'
+        )
+
 
 class CommentSerializer(serializers.ModelSerializer):
     
-
+    creator = creatorSerializer()
 
     class Meta:
 

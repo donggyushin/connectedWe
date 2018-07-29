@@ -6,6 +6,7 @@ import Login from "components/Login";
 import LoginContainer from "containers/LoginContainer";
 import SignUpContainer from "containers/SignUpContainer";
 import NavigationBar from "components/NavigationBar";
+import FeedContainer from "containers/FeedContainer";
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +37,9 @@ const PrivateComponent = () => {
     <Router>
       <div className={cx("private_container")}>
         <NavigationBar />
+        <Switch>
+          <Route exact path="/" component={FeedContainer} />
+        </Switch>
       </div>
     </Router>
   );
