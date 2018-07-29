@@ -1,0 +1,47 @@
+@import "utils";
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 147px;
+
+    .column{
+        width: 33%;
+        font-size: 2rem;
+        color: #485057;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        div{
+            cursor: pointer;
+        }
+
+        .line {
+            margin-right: 8px;
+            margin-left: 8px;
+            font-size: 2rem;
+        }
+
+        .logo {
+            font-family: 'Indie Flower', cursive;
+        }
+
+        input {
+            text-align: center;
+            width: 259px;
+            height: 25px;
+            font-size: 0.7rem;
+            border-radius: 5px;
+            
+        }
+
+        .center {
+            margin-right: 8px;
+            margin-left: 8px;
+        }
+
+    }
+}

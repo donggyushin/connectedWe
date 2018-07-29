@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "components/Login";
 import LoginContainer from "containers/LoginContainer";
 import SignUpContainer from "containers/SignUpContainer";
+import NavigationBar from "components/NavigationBar";
 
 const cx = classNames.bind(styles);
 
@@ -31,7 +32,13 @@ const PublicComponent = () => {
 };
 
 const PrivateComponent = () => {
-  return <div>private component</div>;
+  return (
+    <Router>
+      <div className={cx("private_container")}>
+        <NavigationBar />
+      </div>
+    </Router>
+  );
 };
 
 export default App;
