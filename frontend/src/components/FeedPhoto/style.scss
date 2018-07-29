@@ -1,1 +1,105 @@
 @import "utils";
+
+.container {
+    margin-bottom: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.header_container {
+    
+    width: $basic_width;
+    display: flex;
+    align-items: center;
+
+    .photo {
+        img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+        }
+        margin-right: 20px;
+    }
+
+    .username_name_naturaltime {
+        font-size: 1.3rem;
+        color: gray;
+
+        .row2{
+            font-size: 0.7rem;
+        }
+    }
+}
+
+.image_container {
+    img {
+        width: $basic_width
+    }
+
+    .location{
+        font-size: 0.9rem;
+        color: gray;
+        margin-bottom: 5px;
+    }
+
+    .caption {
+        margin-bottom: 15px;
+    }
+
+    .hashtags {
+        color: gray;
+    }
+
+    
+}
+
+.action_container {
+    width: $basic_width;
+    color: gray;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+
+
+    .counter {
+        font-size: 0.8rem;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+}
+
+.comment_container {
+    width: $basic_width;
+    margin-top: 35px;
+    span {
+        margin-right: 15px;
+    }
+    .comment {
+        margin-bottom: 15px;
+        .username {
+            font-size: 1rem;
+            color: gray;
+        }
+        .message {
+            font-size: 0.9rem;
+            
+        }
+    }
+    input {
+        width: $basic_width;
+        margin-bottom: 38px;
+        padding-left: 10px;
+        height: 30px;
+        border-radius: 4px;
+        color: black;
+        background-color: #bbc5ce;
+        border: 0px;
+        font-weight: 600;
+
+    }
+}
