@@ -37,7 +37,7 @@ const PrivateComponent = () => {
     <Router>
       <div className={cx("private_container")}>
         <NavigationBar />
-        <Switch>
+        <Switch className={cx("switchContainer")}>
           <Route exact path="/" component={FeedContainer} />
         </Switch>
       </div>

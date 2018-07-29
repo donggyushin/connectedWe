@@ -2,11 +2,18 @@
 @import '~include-media/dist/include-media';
 @import url('https://fonts.googleapis.com/css?family=Indie+Flower');
 
-$basic_width : 1005px;
+$basic_width : 620px;
 
 @mixin place-at-center() {
     position: absolute;
         top: 30%;
         z-index: 1;
     
+}
+
+@mixin basic-template {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: $basic_width;
 }

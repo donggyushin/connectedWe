@@ -12,4 +12,15 @@
 .private_container {
     width: 100%;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.switchContainer {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

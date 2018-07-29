@@ -1,1 +1,16 @@
 @import "utils";
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+    .inner_container {
+        @include basic-template;
+        justify-content: center;
+        height: 80vh;
+    }
+    
+}

@@ -3,10 +3,14 @@ import Feed from "components/Feed";
 import { connect } from "react-redux";
 
 class FeedContainer extends Component {
+  state = {
+    loading: true
+  };
   render() {
+    const { loading } = this.state;
     return (
       <div>
-        <Feed />
+        <Feed loading={loading} />
       </div>
     );
   }
