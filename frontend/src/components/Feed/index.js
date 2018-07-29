@@ -14,10 +14,11 @@ import {
   WanderingCubes,
   Wave
 } from "better-react-spinkit";
+import FeedPhotoContainer from "containers/FeedPhotoContainer";
 
 const cx = classNames.bind(styles);
 
-const Feed = ({ loading }) => {
+const Feed = ({ loading, feeds }) => {
   if (loading) {
     return (
       <div className={cx("container")}>
@@ -29,36 +30,10 @@ const Feed = ({ loading }) => {
   } else {
     return (
       <div className={cx("container")}>
-        <div className={cx("inner_container")}>
-          <div>
-            <FeedHeader />
-          </div>
-          <div>
-            <FeedBody />
-          </div>
-          <div>
-            <FeedAction />
-          </div>
-          <div>
-            <FeedComment />
-          </div>
-          <div>
-            <FeedLikeList />
-          </div>
-        </div>
+        {feeds.map(feed => <FeedPhotoContainer {...feed} key={feed.id} />)}
       </div>
     );
   }
 };
-
-const FeedHeader = () => <div>FeedHeader</div>;
-
-const FeedBody = () => <div>feed body</div>;
-
-const FeedAction = () => <div>feed action</div>;
-
-const FeedComment = () => <div>comment</div>;
-
-const FeedLikeList = () => <div>like list</div>;
 
 export default Feed;

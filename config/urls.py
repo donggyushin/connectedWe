@@ -30,10 +30,14 @@ urlpatterns = [
         "notifications/",
         include("connectedwe.notifications.urls", namespace="notifications"),
     ),
-    url(r'^', generic_views.ReactAppView.as_view()),
+    
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )
+urlpatterns += [
+    url(r'^', generic_views.ReactAppView.as_view())
+]
+
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

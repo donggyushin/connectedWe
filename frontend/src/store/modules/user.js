@@ -113,7 +113,7 @@ export function loginwithfacebook(access_token) {
 //initialState
 const initialState = {
   isLoggedIn: localStorage.getItem("jwt") ? true : false,
-  token: "",
+  token: localStorage.getItem("jwt"),
   errorMessage: ""
 };
 
