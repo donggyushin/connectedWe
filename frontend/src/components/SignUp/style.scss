@@ -1,0 +1,61 @@
+@import "utils";
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower');
+
+.container {
+    width: $basic_width;
+    background-color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .textlog {
+        font-family: 'Indie Flower', cursive;
+        color:black;
+        font-size: 3rem;
+        margin-top: 6rem;
+        margin-bottom: 4rem;
+    }
+
+
+    .loginformcontainer{
+        .loginform{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            input {
+                margin-bottom: 1rem;
+                background-color: #F2F2F2;
+                border: 0;
+                width: 321px;
+                height: 36px;
+                border-radius: 10px;
+                padding: 10px;
+                font-size: 0.7rem;
+            }
+
+            .button {
+                padding: 10px;
+                font-size: 1rem;
+                font-weight: 400;
+            }
+        }
+
+    }
+
+    .newAccount {
+        font-family: 'Indie Flower', cursive;
+        margin-top: 1rem;
+        transform: rotate(-30deg);
+        position: relative;
+        left:200px;
+        color: black;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .message{
+        @include place-at-center();
+    }
+}

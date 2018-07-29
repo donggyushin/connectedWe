@@ -1,2 +1,11 @@
 @import '~open-color/open-color';
 @import '~include-media/dist/include-media';
+
+$basic_width : 1005px;
+
+@mixin place-at-center() {
+    position: absolute;
+        top: 30%;
+        z-index: 1;
+    
+}
