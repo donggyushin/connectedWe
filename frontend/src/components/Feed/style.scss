@@ -12,5 +12,9 @@
         justify-content: center;
         
     }
+
+    .modal {
+        @include modal_position;
+    }
     
 }

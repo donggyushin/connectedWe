@@ -21,7 +21,10 @@ const FeedPhoto = props => {
     comment_visiable,
     clickCommentIcon,
     comment_value,
-    handleInput
+    handleInput,
+    is_liked,
+    likePhoto,
+    unlike_photo
   } = props;
   return (
     <div className={cx("container")}>
@@ -41,6 +44,10 @@ const FeedPhoto = props => {
         comment_count={comment_count}
         like_count={like_count}
         clickCommentIcon={clickCommentIcon}
+        is_liked={is_liked}
+        id={id}
+        likePhoto={likePhoto}
+        unlike_photo={unlike_photo}
       />
       {comment_visiable && (
         <CommentContainer
@@ -79,13 +86,37 @@ const PhotoImage = ({ file, location, caption, hashtags }) => (
   </div>
 );
 
-const PhotoActionVar = ({ comment_count, like_count, clickCommentIcon }) => (
+const PhotoActionVar = ({
+  comment_count,
+  like_count,
+  clickCommentIcon,
+  is_liked,
+  likePhoto,
+  unlike_photo
+}) => (
   <div className={cx("action_container")}>
-    <FontAwesome.FaHeart />
+    {is_liked ? (
+      <FontAwesome.FaHeart
+        cursor="pointer"
+        className={cx("liked")}
+        onClick={unlike_photo}
+      />
+    ) : (
+      <FontAwesome.FaHeart
+        cursor="pointer"
+        className={cx("icon")}
+        onClick={likePhoto}
+      />
+    )}
+
     <div className={cx("counter")}>
       {like_count === 0 ? "" : `${like_count} likes`}
     </div>
-    <FontAwesome.FaComment cursor="pointer" onClick={clickCommentIcon} />
+    <FontAwesome.FaComment
+      className={cx("icon")}
+      cursor="pointer"
+      onClick={clickCommentIcon}
+    />
     <div className={cx("counter")}>
       {comment_count === 0 ? "" : `${comment_count}`}
     </div>

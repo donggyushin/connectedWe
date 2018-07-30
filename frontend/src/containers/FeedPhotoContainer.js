@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import FeedPhoto from "components/FeedPhoto";
+import * as feedActions from "store/modules/feed";
 
 class FeedPhotoContainer extends Component {
   state = {
@@ -23,6 +24,16 @@ class FeedPhotoContainer extends Component {
     });
   };
 
+  _likePhoto = () => {
+    const { like_photo } = this.props;
+    like_photo();
+  };
+
+  _unlike_photo = () => {
+    const { unlike_photo } = this.props;
+    unlike_photo();
+  };
+
   render() {
     const { comment_visiable, comment_value } = this.state;
     return (
@@ -32,6 +43,8 @@ class FeedPhotoContainer extends Component {
         clickCommentIcon={this._clickCommentIcon}
         comment_value={comment_value}
         handleInput={this._handleInput}
+        likePhoto={this._likePhoto}
+        unlike_photo={this._unlike_photo}
       />
     );
   }
@@ -39,7 +52,10 @@ class FeedPhotoContainer extends Component {
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  like_photo: () => dispatch(feedActions.like_photo(ownProps.id)),
+  unlike_photo: () => dispatch(feedActions.unlike_photo(ownProps.id))
+});
 
 export default connect(
   mapStateToProps,

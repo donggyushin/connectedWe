@@ -36,9 +36,7 @@ class ImageView(APIView):
         for user_image in user_images:
 
             following_images.append(user_image)
-        print("count:")
-        print(following_images.count(all))
-        print(len(following_images))
+     
 
         image_count = len(following_images)
 
@@ -52,7 +50,7 @@ class ImageView(APIView):
 
         sorted_follwoing_images = sorted(following_images, key=get_key, reverse=True)
 
-        serializer = serializers.ImageSerializer(sorted_follwoing_images, many=True)
+        serializer = serializers.ImageSerializer(sorted_follwoing_images, many=True, context={'request': request})
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
@@ -212,7 +210,7 @@ class SingleImageView(APIView):
     def get(self, request,image_id ,format=None):
         
         singlePhoto = models.Image.objects.get(id=image_id)
-        serializered = serializers.SingleImageSerializer(singlePhoto)
+        serializered = serializers.SingleImageSerializer(singlePhoto, context={'request':request})
         
         
         return Response(data=serializered.data,status=status.HTTP_200_OK)

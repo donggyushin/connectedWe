@@ -61,6 +61,7 @@ class ImageSerializer(serializers.ModelSerializer):
     comment_set = CommentSerializer(many=True)
     hashtags = TagListSerializerField()
     creator = BasicUserSerializer()
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
 
@@ -76,13 +77,28 @@ class ImageSerializer(serializers.ModelSerializer):
             'comment_set',
             'like_count',
             'comment_count',
-            'hashtags'
+            'hashtags',
+            'is_liked'
         )
+
+    def get_is_liked(self, obj):
+        if 'request' in self.context:
+            request = self.context['request']
+            try:
+                models.Like.objects.get(creator=request.user, image=obj)
+                return True
+            except models.Like.DoesNotExist:
+                return False
+        else:
+            return False
+
 class SingleImageSerializer(serializers.ModelSerializer):
+    
     
     comment_set = CommentSerializer(many=True)
     creator = BasicUserSerializer()
     hashtags = TagListSerializerField()
+    is_liked = serializers.SerializerMethodField()
     
     class Meta:
         
@@ -96,8 +112,24 @@ class SingleImageSerializer(serializers.ModelSerializer):
             'comment_set',
             'creator',
             'comment_count',
-            'hashtags'
+            'hashtags',
+            'is_liked'
         )
+    def get_is_liked(self, obj):
+        
+        
+        
+        if 'request' in self.context:
+           
+            request = self.context['request']
+            try:
+                print(request.user.id)
+                print(obj.id)
+                models.Like.objects.get(creator__id=request.user.id, image__id=obj.id)
+                return True 
+            except models.Like.DoesNotExist:
+                return False 
+        return False
 
 class LikeListSerializer(serializers.ModelSerializer):
     

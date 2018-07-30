@@ -17,3 +17,9 @@ $basic_width : 620px;
     align-items: center;
     width: $basic_width;
 }
+
+@mixin modal_position {
+    position: fixed;
+    top:30%;
+    left:35%;
+}

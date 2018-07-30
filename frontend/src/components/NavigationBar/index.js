@@ -6,7 +6,7 @@ import * as FontAwesome from "react-icons/lib/fa";
 
 const cx = classNames.bind(styles);
 
-const NavigationBar = () => (
+const NavigationBar = ({ clickLogoutButton, isLoggedIn }) => (
   <div className={cx("container")}>
     <div className={cx("column")}>
       <div>
@@ -23,6 +23,7 @@ const NavigationBar = () => (
         <FontAwesome.FaSearch />
         <FontAwesome.FaHeart className={cx("center")} />
         <FontAwesome.FaUser />
+        {isLoggedIn && <span onClick={clickLogoutButton}>logout</span>}
       </div>
     </div>
   </div>

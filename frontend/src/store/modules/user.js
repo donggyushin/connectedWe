@@ -5,6 +5,7 @@ const SAVE_TOKEN = "user/SAVE_TOKEN";
 const HANDLE_ISLOGGEDIN = "user/HANDLE_ISLOGGEDIN";
 const ERROR = "user/ERROR";
 const CLEARERROR = "user/CLEARERROR";
+const LOGOUT = "user/LOGOUT";
 
 //action creators
 
@@ -24,6 +25,10 @@ export const set_error_message = text => ({
 
 export const clear_error = () => ({
   type: CLEARERROR
+});
+
+export const logout = () => ({
+  type: LOGOUT
 });
 //API actions
 
@@ -110,6 +115,27 @@ export function loginwithfacebook(access_token) {
   };
 }
 
+export function logoutApiAction() {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    fetch("/rest-auth/logout/", {
+      method: "POST",
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        console.log(response);
+        dispatch(logout());
+        localStorage.removeItem("jwt");
+      })
+      .catch(err => console.log(err));
+  };
+}
+
 //initialState
 const initialState = {
   isLoggedIn: localStorage.getItem("jwt") ? true : false,
@@ -142,6 +168,13 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         errorMessage: ""
+      };
+
+    case LOGOUT:
+      return {
+        ...state,
+        isLoggedIn: false,
+        token: ""
       };
 
     default:

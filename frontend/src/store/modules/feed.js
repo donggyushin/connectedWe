@@ -1,9 +1,12 @@
 //import
+import * as userActions from "./user";
 
 //actions
 const SAVE_FEEDS = "feed/SAVE_FEEDS";
 const SET_FEED_TRUE = "feed/SET_FEED_TRUE";
 const SET_FEED_FALSE = "feed/SET_FEED_FALSE";
+const DOLIKEPHOTO = "feed/DOLIKEPHOTO";
+const DOUNLIKEPHOTO = "feed/DOUNLIKEPHOTO";
 //action creators
 
 export const save_feeds = feeds => ({
@@ -17,6 +20,16 @@ export const set_feed_true = () => ({
 
 export const set_feed_false = () => ({
   type: SET_FEED_FALSE
+});
+
+export const do_like_photo = photoId => ({
+  type: DOLIKEPHOTO,
+  photoId
+});
+
+export const do_unlike_photo = photoId => ({
+  type: DOUNLIKEPHOTO,
+  photoId
 });
 
 //api action creators
@@ -52,6 +65,56 @@ export function getFeeds() {
   };
 }
 
+export function like_photo(image_id) {
+  return (dispatch, getState) => {
+    dispatch(do_like_photo(image_id));
+    const {
+      user: { token }
+    } = getState();
+    fetch(`/images/${image_id}/like/`, {
+      method: "POST",
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          console.log("success");
+        } else {
+          dispatch(do_unlike_photo(image_id));
+          dispatch(userActions.set_error_message("fail to like"));
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
+
+export function unlike_photo(image_id) {
+  return (dispatch, getState) => {
+    dispatch(do_unlike_photo(image_id));
+    const {
+      user: { token }
+    } = getState();
+    fetch(`images/${image_id}/unlike/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log("success");
+        } else {
+          dispatch(do_like_photo(image_id));
+          dispatch(userActions.set_error_message("fail to unlike"));
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
+
 //initialState
 
 const initialState = {
@@ -78,7 +141,53 @@ export default function reducer(state = initialState, action) {
         ...state,
         no_feed: true
       };
+    case DOLIKEPHOTO:
+      return applyLike(state, action);
+    case DOUNLIKEPHOTO:
+      return applyUnLike(state, action);
     default:
       return state;
   }
+}
+
+function applyLike(state, action) {
+  const { photoId } = action;
+  const { feeds } = state;
+  const updatedFeeds = feeds.map(feed => {
+    console.log(photoId);
+    console.log(feed.id);
+    if (feed.id === photoId) {
+      console.log("i'm in");
+      return {
+        ...feed,
+        is_liked: true,
+        like_count: feed.like_count + 1
+      };
+    }
+    return feed;
+  });
+  return {
+    ...state,
+    feeds: updatedFeeds
+  };
+}
+
+function applyUnLike(state, action) {
+  const { photoId } = action;
+  const { feeds } = state;
+  const updatedFeeds = feeds.map(feed => {
+    console.log(photoId);
+    if (feed.id === photoId) {
+      return {
+        ...feed,
+        is_liked: false,
+        like_count: feed.like_count - 1
+      };
+    }
+    return feed;
+  });
+  return {
+    ...state,
+    feeds: updatedFeeds
+  };
 }
