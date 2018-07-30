@@ -100,7 +100,11 @@ const CommentContainer = ({ comments, comment_value, handleInput }) => (
       onChange={handleInput}
     />
     {comments.map(comment => (
-      <Comment username={comment.creator.username} message={comment.message} />
+      <Comment
+        username={comment.creator.username}
+        key={comment.id}
+        message={comment.message}
+      />
     ))}
   </div>
 );

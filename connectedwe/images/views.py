@@ -36,6 +36,17 @@ class ImageView(APIView):
         for user_image in user_images:
 
             following_images.append(user_image)
+        print("count:")
+        print(following_images.count(all))
+        print(len(following_images))
+
+        image_count = len(following_images)
+
+        if image_count == 0 :
+            
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 

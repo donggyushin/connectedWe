@@ -19,7 +19,7 @@ const NavigationBar = () => (
       <input placeholder="search" name="search" />
     </div>
     <div className={cx("column")}>
-      <div>
+      <div className={cx("icons")}>
         <FontAwesome.FaSearch />
         <FontAwesome.FaHeart className={cx("center")} />
         <FontAwesome.FaUser />

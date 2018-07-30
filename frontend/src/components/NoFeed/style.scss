@@ -1,0 +1,65 @@
+@import "utils";
+
+
+.mom {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    .arrow {
+        
+        position: absolute;
+        left: 1190px;
+        top:100px;
+        color: gray;
+        display: flex;
+        flex-direction: column;
+        .icon{
+            font-size: 1.8rem;
+        transform: rotate(300deg);
+        }
+        span {
+            position: relative;
+            right: 50px;
+        }
+    }
+    .firstButton {
+        position: absolute;
+        left: 600px;
+        top: 600px;
+        cursor: pointer;
+        width: 236px;
+        height: 67px;
+        background-color: green;
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        box-shadow: 5px 5px 10px #847979;
+    }
+}
+
+.container {
+    position: absolute;
+    top: 15%;
+    left:15%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    .hello_text {
+        display: flex;
+        flex-direction: column;
+        .upper {
+            padding-bottom: 30px;
+            font-size: 1.3rem;
+            color: gray;
+        }
+
+        .lower{
+            font-size: 0.9rem;
+            color:gray;
+        }
+    }
+}

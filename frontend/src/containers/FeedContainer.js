@@ -33,7 +33,7 @@ class FeedContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.feeds) {
+    if (nextProps.no_feed || !nextProps.no_feed) {
       this.setState({
         loading: false
       });
@@ -41,18 +41,19 @@ class FeedContainer extends Component {
   }
   render() {
     const { loading } = this.state;
-    const { feeds } = this.props;
+    const { feeds, no_feed } = this.props;
 
     return (
       <div>
-        <Feed feeds={feeds} loading={loading} />
+        <Feed feeds={feeds} no_feed={no_feed} loading={loading} />
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  feeds: state.feed.feeds
+  feeds: state.feed.feeds,
+  no_feed: state.feed.no_feed
 });
 
 const mapDispatchToProps = dispatch => ({
