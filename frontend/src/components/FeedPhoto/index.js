@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./style.scss";
 import classNames from "classnames/bind";
 import * as FontAwesome from "react-icons/lib/fa";
+import UserListContainer from "containers/UserListContainer";
 
 const cx = classNames.bind(styles);
 
@@ -25,7 +26,9 @@ const FeedPhoto = props => {
     is_liked,
     likePhoto,
     unlike_photo,
-    press_enter
+    press_enter,
+    userListBoolean,
+    toggleUserListBoolean
   } = props;
   return (
     <div className={cx("container")}>
@@ -49,6 +52,8 @@ const FeedPhoto = props => {
         id={id}
         likePhoto={likePhoto}
         unlike_photo={unlike_photo}
+        userListBoolean={userListBoolean}
+        toggleUserListBoolean={toggleUserListBoolean}
       />
       {comment_visiable && (
         <CommentContainer
@@ -95,7 +100,10 @@ const PhotoActionVar = ({
   clickCommentIcon,
   is_liked,
   likePhoto,
-  unlike_photo
+  unlike_photo,
+  userListBoolean,
+  toggleUserListBoolean,
+  id
 }) => (
   <div className={cx("action_container")}>
     {is_liked ? (
@@ -112,7 +120,7 @@ const PhotoActionVar = ({
       />
     )}
 
-    <div className={cx("counter")}>
+    <div className={cx("counter")} onClick={toggleUserListBoolean}>
       {like_count === 0 ? "" : `${like_count} likes`}
     </div>
     <FontAwesome.FaComment
@@ -122,6 +130,14 @@ const PhotoActionVar = ({
     />
     <div className={cx("counter")}>
       {comment_count === 0 ? "" : `${comment_count}`}
+    </div>
+    <div className={cx("UserListContainer")}>
+      {userListBoolean && (
+        <UserListContainer
+          toggleUserListBoolean={toggleUserListBoolean}
+          id={id}
+        />
+      )}
     </div>
   </div>
 );

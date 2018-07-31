@@ -9,7 +9,18 @@ const DOLIKEPHOTO = "feed/DOLIKEPHOTO";
 const DOUNLIKEPHOTO = "feed/DOUNLIKEPHOTO";
 const CLEARSTATE = "feed/CLEARSTATE";
 const ADDCOMMENT = "feed/ADDCOMMENT";
+const SETLIKELIST = "feed/SETLIKELIST";
+const REMOVELIKELIST = "feed/REMOVELIKELIST";
 //action creators
+
+export const remove_like_list = () => ({
+  type: REMOVELIKELIST
+});
+
+export const set_like_list = list => ({
+  type: SETLIKELIST,
+  list
+});
 
 export const add_comment = (photoId, message) => ({
   type: ADDCOMMENT,
@@ -46,12 +57,36 @@ export const clear_state = () => ({
 
 //api action creators
 
+export function getLikeListApi(image_id) {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    fetch(`images/${image_id}/like/list/`, {
+      method: "GET",
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log("response ok");
+          console.log(response);
+          return response.json();
+        }
+        dispatch(userActions.set_error_message("Server Error!"));
+      })
+      .then(json => dispatch(set_like_list(json)))
+      .catch(err => console.log(err));
+  };
+}
+
 export function getFeeds() {
   return (dispatch, getState) => {
     const {
       user: { token }
     } = getState();
-    console.log(token);
     fetch("/images/", {
       method: "GET",
       headers: {
@@ -160,7 +195,8 @@ export function add_comment_api(imageId, message) {
 
 const initialState = {
   feeds: null,
-  no_feed: false
+  no_feed: false,
+  like_list: null
 };
 
 //reducer
@@ -181,9 +217,28 @@ export default function reducer(state = initialState, action) {
       return applyClearState(state, action);
     case ADDCOMMENT:
       return applyAddComment(state, action);
+    case SETLIKELIST:
+      return applySetLikeList(state, action);
+    case REMOVELIKELIST:
+      return applyRemoveLikeList(state, action);
     default:
       return state;
   }
+}
+
+function applyRemoveLikeList(state, action) {
+  return {
+    ...state,
+    like_list: null
+  };
+}
+
+function applySetLikeList(state, action) {
+  const { list } = action;
+  return {
+    ...state,
+    like_list: list
+  };
 }
 
 function applyClearState(state, action) {

@@ -255,6 +255,6 @@ class LikeListView(APIView):
         
         ImageFound = models.Image.objects.get(id=image_id)
         like_list = models.Like.objects.filter(image=ImageFound)
-        serializered = serializers.LikeListSerializer(like_list, many=True)
+        serializered = serializers.LikeListSerializer(like_list, many=True, context={'request':request})
 
         return Response(data=serializered.data,status=status.HTTP_200_OK)

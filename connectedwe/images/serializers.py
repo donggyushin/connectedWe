@@ -134,6 +134,7 @@ class SingleImageSerializer(serializers.ModelSerializer):
 class LikeListSerializer(serializers.ModelSerializer):
     
     creator = BasicUserSerializer()
+    is_following = serializers.SerializerMethodField()
     
     class Meta:
         
@@ -141,7 +142,19 @@ class LikeListSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'creator',
+            'is_following'
         )
+    def get_is_following(self, obj) :
+        
+        if 'request' in self.context:
+            request = self.context['request']
+
+            me = request.user
+            if obj.creator in me.following.all():
+                return True 
+        
+
+        return False
 
 
 
