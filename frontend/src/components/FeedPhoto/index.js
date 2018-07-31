@@ -24,7 +24,8 @@ const FeedPhoto = props => {
     handleInput,
     is_liked,
     likePhoto,
-    unlike_photo
+    unlike_photo,
+    press_enter
   } = props;
   return (
     <div className={cx("container")}>
@@ -54,6 +55,8 @@ const FeedPhoto = props => {
           comments={comment_set}
           comment_value={comment_value}
           handleInput={handleInput}
+          id={id}
+          press_enter={press_enter}
         />
       )}
     </div>
@@ -123,12 +126,18 @@ const PhotoActionVar = ({
   </div>
 );
 
-const CommentContainer = ({ comments, comment_value, handleInput }) => (
+const CommentContainer = ({
+  comments,
+  comment_value,
+  handleInput,
+  press_enter
+}) => (
   <div className={cx("comment_container")}>
     <input
       placeholder="Leave a comment!"
       value={comment_value}
       onChange={handleInput}
+      onKeyPress={press_enter}
     />
     {comments.map(comment => (
       <Comment

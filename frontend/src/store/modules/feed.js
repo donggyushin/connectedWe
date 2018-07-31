@@ -7,7 +7,15 @@ const SET_FEED_TRUE = "feed/SET_FEED_TRUE";
 const SET_FEED_FALSE = "feed/SET_FEED_FALSE";
 const DOLIKEPHOTO = "feed/DOLIKEPHOTO";
 const DOUNLIKEPHOTO = "feed/DOUNLIKEPHOTO";
+const CLEARSTATE = "feed/CLEARSTATE";
+const ADDCOMMENT = "feed/ADDCOMMENT";
 //action creators
+
+export const add_comment = (photoId, message) => ({
+  type: ADDCOMMENT,
+  photoId,
+  message
+});
 
 export const save_feeds = feeds => ({
   type: SAVE_FEEDS,
@@ -30,6 +38,10 @@ export const do_like_photo = photoId => ({
 export const do_unlike_photo = photoId => ({
   type: DOUNLIKEPHOTO,
   photoId
+});
+
+export const clear_state = () => ({
+  type: CLEARSTATE
 });
 
 //api action creators
@@ -115,6 +127,35 @@ export function unlike_photo(image_id) {
   };
 }
 
+export function add_comment_api(imageId, message) {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    console.log(imageId);
+    fetch(`images/${imageId}/comment/`, {
+      method: "POST",
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: message
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        dispatch(userActions.set_error_message("Server Error!"));
+      })
+      .then(json => {
+        dispatch(add_comment(imageId, json));
+      })
+      .catch(err => console.log(err));
+  };
+}
+
 //initialState
 
 const initialState = {
@@ -127,27 +168,71 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SAVE_FEEDS:
-      return {
-        ...state,
-        feeds: action.feeds
-      };
+      return apply_save_feeds(state, action);
     case SET_FEED_FALSE:
-      return {
-        ...state,
-        no_feed: false
-      };
+      return apply_set_feed_false(state, action);
     case SET_FEED_TRUE:
-      return {
-        ...state,
-        no_feed: true
-      };
+      return apply_set_feed_true(state, action);
     case DOLIKEPHOTO:
       return applyLike(state, action);
     case DOUNLIKEPHOTO:
       return applyUnLike(state, action);
+    case CLEARSTATE:
+      return applyClearState(state, action);
+    case ADDCOMMENT:
+      return applyAddComment(state, action);
     default:
       return state;
   }
+}
+
+function applyClearState(state, action) {
+  return {
+    feeds: null,
+    no_feed: false
+  };
+}
+
+function apply_save_feeds(state, action) {
+  return {
+    ...state,
+    feeds: action.feeds
+  };
+}
+
+function apply_set_feed_false(state, action) {
+  return {
+    ...state,
+    no_feed: false
+  };
+}
+function apply_set_feed_true(state, action) {
+  return {
+    ...state,
+    no_feed: true
+  };
+}
+
+function applyAddComment(state, action) {
+  const { photoId, message } = action;
+  const { feeds } = state;
+  console.log("photoId: " + photoId);
+  console.log("message: " + message);
+
+  const updatedFeeds = feeds.map(feed => {
+    if (feed.id === photoId) {
+      console.log("here!");
+      return {
+        ...feed,
+        comment_set: [...feed.comment_set, message]
+      };
+    }
+    return feed;
+  });
+  return {
+    ...state,
+    feeds: updatedFeeds
+  };
 }
 
 function applyLike(state, action) {

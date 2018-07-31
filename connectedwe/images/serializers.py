@@ -43,7 +43,7 @@ class creatorSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     
-    creator = creatorSerializer()
+    creator = creatorSerializer(read_only=True)
 
     class Meta:
 

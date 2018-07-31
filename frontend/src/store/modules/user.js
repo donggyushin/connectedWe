@@ -1,4 +1,5 @@
 //import
+import * as feedActions from "./feed";
 
 //actions
 const SAVE_TOKEN = "user/SAVE_TOKEN";
@@ -130,6 +131,7 @@ export function logoutApiAction() {
       .then(response => {
         console.log(response);
         dispatch(logout());
+        dispatch(feedActions.clear_state());
         localStorage.removeItem("jwt");
       })
       .catch(err => console.log(err));
@@ -145,39 +147,60 @@ const initialState = {
 
 //reducer
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action, getState) {
   switch (action.type) {
     case SAVE_TOKEN:
-      localStorage.setItem("jwt", action.token);
-      return {
-        ...state,
-        token: action.token
-      };
+      return applySaveToken(state, action);
 
     case HANDLE_ISLOGGEDIN:
-      return {
-        ...state,
-        isLoggedIn: localStorage.getItem("jwt") ? true : false
-      };
+      return applyHandleIsLoggedIn(state, action);
+
     case ERROR:
-      return {
-        ...state,
-        errorMessage: action.errorMessage
-      };
+      return applyError(state, action);
+
     case CLEARERROR:
-      return {
-        ...state,
-        errorMessage: ""
-      };
+      return applyClearError(state, action);
 
     case LOGOUT:
-      return {
-        ...state,
-        isLoggedIn: false,
-        token: ""
-      };
+      return applyLogout(state, action, getState);
 
     default:
       return state;
   }
+}
+
+//reducer functions
+function applyLogout(state, action, getState) {
+  return {
+    ...state,
+    isLoggedIn: false,
+    token: ""
+  };
+}
+function applyClearError(state, action) {
+  return {
+    ...state,
+    errorMessage: ""
+  };
+}
+function applyError(state, action) {
+  return {
+    ...state,
+    errorMessage: action.errorMessage
+  };
+}
+
+function applySaveToken(state, action) {
+  localStorage.setItem("jwt", action.token);
+  return {
+    ...state,
+    token: action.token
+  };
+}
+
+function applyHandleIsLoggedIn(state, action) {
+  return {
+    ...state,
+    isLoggedIn: localStorage.getItem("jwt") ? true : false
+  };
 }
