@@ -93,7 +93,7 @@ class UserView(APIView):
     def get (self, request, format=None):
         
         users_on_explore = models.User.objects.all()[:50]
-        serializered_users = serializers.UserSerializer(users_on_explore, many=True)
+        serializered_users = serializers.UserSerializer(users_on_explore, many=True, context={'request': request})
         
         return Response(data=serializered_users.data ,status=status.HTTP_200_OK)
 

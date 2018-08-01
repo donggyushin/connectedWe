@@ -44,3 +44,32 @@ class EditUserProfileSerializer(serializers.ModelSerializer):
             'profile_image',
 
         )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    
+    is_following = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = models.User
+        fields = (
+            'id',
+            'username',
+            'name',
+            'is_following'
+        )
+
+    def get_is_following(self, obj):
+
+        if 'request' in self.context:
+
+            request = self.context['request']
+
+            me = request.user
+
+            if obj in me.following.all():
+
+                return True 
+
+        return False
