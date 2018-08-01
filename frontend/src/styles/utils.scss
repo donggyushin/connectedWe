@@ -3,6 +3,8 @@
 @import url('https://fonts.googleapis.com/css?family=Indie+Flower');
 
 $basic_width : 620px;
+$username_fontsize: 1.3rem;
+$name_fontsize: 0.7rem;
 
 @mixin place-at-center() {
     position: absolute;

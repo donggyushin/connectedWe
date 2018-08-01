@@ -11,7 +11,19 @@ const CLEARSTATE = "feed/CLEARSTATE";
 const ADDCOMMENT = "feed/ADDCOMMENT";
 const SETLIKELIST = "feed/SETLIKELIST";
 const REMOVELIKELIST = "feed/REMOVELIKELIST";
+const UNFOLLOW = "feed/UNFOLLOW";
+const FOLLOW = "feed/FOLLOW";
 //action creators
+
+export const follow = user_id => ({
+  type: FOLLOW,
+  user_id
+});
+
+export const unfollow = user_id => ({
+  type: UNFOLLOW,
+  user_id
+});
 
 export const remove_like_list = () => ({
   type: REMOVELIKELIST
@@ -56,6 +68,52 @@ export const clear_state = () => ({
 });
 
 //api action creators
+
+export function unfollowUserApi(user_id) {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    dispatch(unfollow(user_id));
+    fetch(`users/${user_id}/unfollow/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(userActions.set_error_message("Can't find user"));
+          dispatch(follow(user_id));
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
+
+export function followUserApi(user_id) {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    dispatch(follow(user_id));
+    fetch(`users/${user_id}/follow/`, {
+      method: "POST",
+      headers: {
+        Authorization: `JWT ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(userActions.set_error_message("Can't find user"));
+          dispatch(unfollow(user_id));
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
 
 export function getLikeListApi(image_id) {
   return (dispatch, getState) => {
@@ -221,9 +279,49 @@ export default function reducer(state = initialState, action) {
       return applySetLikeList(state, action);
     case REMOVELIKELIST:
       return applyRemoveLikeList(state, action);
+    case UNFOLLOW:
+      return applyUnfollowUser(state, action);
+    case FOLLOW:
+      return applyFollow(state, action);
     default:
       return state;
   }
+}
+
+function applyFollow(state, action) {
+  const { user_id } = action;
+  const { like_list } = state;
+  const updatedLikeList = like_list.map(like => {
+    if (like.creator.id === user_id) {
+      return {
+        ...like,
+        is_following: true
+      };
+    }
+    return like;
+  });
+  return {
+    ...state,
+    like_list: updatedLikeList
+  };
+}
+
+function applyUnfollowUser(state, action) {
+  const { user_id } = action;
+  const { like_list } = state;
+  const updatedLikeList = like_list.map(like => {
+    if (like.creator.id === user_id) {
+      return {
+        ...like,
+        is_following: false
+      };
+    }
+    return like;
+  });
+  return {
+    ...state,
+    like_list: updatedLikeList
+  };
 }
 
 function applyRemoveLikeList(state, action) {

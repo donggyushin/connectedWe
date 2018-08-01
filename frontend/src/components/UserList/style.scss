@@ -16,8 +16,9 @@
         background-color: white;
         width: 630px;
         border-radius: 8px;
+        
         .header{
-        border-bottom :1px solid #8d9093;
+        border-bottom :2px solid #DCDCDA;
         padding:10px;
         display: flex;
         justify-content: flex-end;
@@ -27,7 +28,8 @@
     }
 
     .body {
-
+        max-height: 600px;
+        overflow: scroll;
     }
     }
 
