@@ -1,29 +1,16 @@
 import React from "react";
-import styles from "./style.scss";
+import styles from "./styles.scss";
 import classNames from "classnames/bind";
-import {
-  ChasingDots,
-  Circle,
-  CubeGrid,
-  DoubleBounce,
-  FadingCircle,
-  FoldingCube,
-  Pulse,
-  RotatingPlane,
-  ThreeBounce,
-  WanderingCubes,
-  Wave
-} from "better-react-spinkit";
+import { Circle } from "better-react-spinkit";
 import FeedPhotoContainer from "containers/FeedPhotoContainer";
 import NoFeedContainer from "containers/NoFeedContainer";
-import MessageModalContainer from "containers/MessageModalContainer";
 
 const cx = classNames.bind(styles);
 
-const Feed = ({ loading, feeds, no_feed, errorMessage }) => {
+const Feed = ({ loading, feeds, no_feed }) => {
   if (no_feed) {
     return (
-      <div>
+      <div className={cx("container")}>
         <NoFeedContainer />
       </div>
     );
@@ -39,9 +26,6 @@ const Feed = ({ loading, feeds, no_feed, errorMessage }) => {
     return (
       <div className={cx("container")}>
         {feeds.map(feed => <FeedPhotoContainer {...feed} key={feed.id} />)}
-        <div className={cx("modal")}>
-          {errorMessage !== "" && <MessageModalContainer />}
-        </div>
       </div>
     );
   }

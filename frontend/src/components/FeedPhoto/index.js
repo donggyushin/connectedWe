@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./style.scss";
+import styles from "./styles.scss";
 import classNames from "classnames/bind";
 import * as FontAwesome from "react-icons/lib/fa";
 import UserListContainer from "containers/UserListContainer";
@@ -120,7 +120,10 @@ const PhotoActionVar = ({
       />
     )}
 
-    <div className={cx("counter")} onClick={toggleUserListBoolean}>
+    <div
+      className={cx("counter", "likecounter")}
+      onClick={toggleUserListBoolean}
+    >
       {like_count === 0 ? "" : `${like_count} likes`}
     </div>
     <FontAwesome.FaComment

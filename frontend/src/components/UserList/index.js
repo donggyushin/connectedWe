@@ -1,19 +1,7 @@
 import React from "react";
-import styles from "./style.scss";
+import styles from "./styles.scss";
 import classNames from "classnames/bind";
-import {
-  ChasingDots,
-  Circle,
-  CubeGrid,
-  DoubleBounce,
-  FadingCircle,
-  FoldingCube,
-  Pulse,
-  RotatingPlane,
-  ThreeBounce,
-  WanderingCubes,
-  Wave
-} from "better-react-spinkit";
+import { Circle } from "better-react-spinkit";
 import UserListItemContainer from "containers/UserListItemContainer";
 
 const cx = classNames.bind(styles);

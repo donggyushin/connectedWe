@@ -10,17 +10,18 @@ class AppContainer extends Component {
   }
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, errorMessage } = this.props;
     return (
       <div>
-        <App isLoggedIn={isLoggedIn} />
+        <App isLoggedIn={isLoggedIn} errorMessage={errorMessage} />
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.user.isLoggedIn
+  isLoggedIn: state.user.isLoggedIn,
+  errorMessage: state.user.errorMessage
 });
 
 const mapDispatchToProps = dispatch => ({

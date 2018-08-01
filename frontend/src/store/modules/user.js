@@ -1,14 +1,37 @@
 //import
 import * as feedActions from "./feed";
 
+const headers = token => ({
+  Authorization: `JWT ${token}`,
+  "Content-Type": "application/json"
+});
+
 //actions
 const SAVE_TOKEN = "user/SAVE_TOKEN";
 const HANDLE_ISLOGGEDIN = "user/HANDLE_ISLOGGEDIN";
 const ERROR = "user/ERROR";
 const CLEARERROR = "user/CLEARERROR";
 const LOGOUT = "user/LOGOUT";
+const SETUSEREXPLORE = "user/SETUSEREXPLORE";
+const FOLLOW = "user/FOLLOW";
+const UNFOLLOW = "user/UNFOLLOW";
 
 //action creators
+
+export const follow = user_id => ({
+  type: FOLLOW,
+  user_id
+});
+
+export const unfollow = user_id => ({
+  type: UNFOLLOW,
+  user_id
+});
+
+export const set_user_explore = userList => ({
+  type: SETUSEREXPLORE,
+  userList
+});
 
 export const save_token = token => ({
   type: SAVE_TOKEN,
@@ -32,6 +55,46 @@ export const logout = () => ({
   type: LOGOUT
 });
 //API actions
+
+export function api_follow(user_id) {
+  return (dispatch, getState) => {
+    dispatch(follow(user_id));
+    const {
+      user: { token }
+    } = getState();
+    fetch(`users/${user_id}/follow/`, {
+      method: "POST",
+      headers: headers(token)
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(set_error_message("fail to follow user"));
+          dispatch(unfollow(user_id));
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
+
+export function api_unfollow(user_id) {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    dispatch(unfollow(user_id));
+    fetch(`users/${user_id}/unfollow/`, {
+      method: "DELETE",
+      headers: headers(token)
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(set_error_message("fail to unfollow!"));
+          dispatch(follow(user_id));
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
 
 export function username_login(username, password) {
   return dispatch => {
@@ -138,11 +201,32 @@ export function logoutApiAction() {
   };
 }
 
+export function apiSetUserExplore() {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    fetch(`users/explore/`, {
+      method: "GET",
+      headers: headers(token)
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(set_error_message("fail to load data"));
+        }
+        return response.json();
+      })
+      .then(json => dispatch(set_user_explore(json)))
+      .catch(err => console.log(err));
+  };
+}
+
 //initialState
 const initialState = {
   isLoggedIn: localStorage.getItem("jwt") ? true : false,
   token: localStorage.getItem("jwt"),
-  errorMessage: ""
+  errorMessage: "",
+  userList: null
 };
 
 //reducer
@@ -164,12 +248,65 @@ export default function reducer(state = initialState, action, getState) {
     case LOGOUT:
       return applyLogout(state, action, getState);
 
+    case SETUSEREXPLORE:
+      return applySetUserList(state, action);
+
+    case FOLLOW:
+      return applyFollow(state, action);
+    case UNFOLLOW:
+      return applyUnfollow(state, action);
+
     default:
       return state;
   }
 }
 
 //reducer functions
+
+function applyFollow(state, action) {
+  const { user_id } = action;
+  const { userList } = state;
+  const updatedUserList = userList.map(user => {
+    if (user.id === user_id) {
+      return {
+        ...user,
+        is_following: true
+      };
+    }
+    return user;
+  });
+  return {
+    ...state,
+    userList: updatedUserList
+  };
+}
+
+function applyUnfollow(state, action) {
+  const { user_id } = action;
+  const { userList } = state;
+  const updatedUserList = userList.map(user => {
+    if (user.id === user_id) {
+      return {
+        ...user,
+        is_following: false
+      };
+    }
+    return user;
+  });
+  return {
+    ...state,
+    userList: updatedUserList
+  };
+}
+
+function applySetUserList(state, action) {
+  const { userList } = action;
+  return {
+    ...state,
+    userList: userList
+  };
+}
+
 function applyLogout(state, action, getState) {
   return {
     ...state,

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./style.scss";
+import styles from "./styles.scss";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import MessageModalContainer from "containers/MessageModalContainer";

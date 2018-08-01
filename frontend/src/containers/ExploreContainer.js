@@ -1,16 +1,53 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Explore from "components/Explore";
+import * as userActions from "store/modules/user";
 
 class ExploreContainer extends Component {
+  state = {
+    loading: true
+  };
+
+  componentDidMount() {
+    const { apiSetUserExplore, userList } = this.props;
+    if (userList === null) {
+      apiSetUserExplore();
+    } else {
+      this.setState({
+        loading: false
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.userList && nextProps.userList) {
+      this.setState({
+        loading: false
+      });
+    }
+  }
+
   render() {
-    return <Explore />;
+    const { userList, errorMessage } = this.props;
+    const { loading } = this.state;
+    return (
+      <Explore
+        userList={userList}
+        errorMessage={errorMessage}
+        loading={loading}
+      />
+    );
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  userList: state.user.userList,
+  errorMessage: state.user.errorMessage
+});
 
-const mapDispatchToProps = (dispatch, ownProps) => ({});
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  apiSetUserExplore: () => dispatch(userActions.apiSetUserExplore())
+});
 
 export default connect(
   mapStateToProps,

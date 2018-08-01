@@ -1,0 +1,75 @@
+@import "utils";
+
+.header_container{
+    display: flex;
+    margin-top: 200px;
+    .photo{
+        margin-right: 20px;
+        img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+    }
+    .username_name_naturaltime{
+        .row{
+            font-size: $username_fontsize;
+        }
+        .row2{
+            font-size: $name_fontsize;
+            color: $strong_gray;
+        }
+    }
+}
+
+.image_container{
+    img {
+        max-width: $max_width;
+    }
+    .location {
+        color: $strong_gray;
+    }
+
+    .caption {
+        font-size: 1.1rem;
+        margin-bottom: 18px;
+    }
+
+    .hashtags {
+        color: $strong_gray;
+    }
+}
+
+.action_container{
+    display: flex;
+    align-items: center;
+    .liked {
+        color: $red;
+    }
+    .likecounter{
+        cursor: pointer;
+    }
+ 
+    .counter {
+        margin: 10px;
+        
+    }
+}
+
+.comment_container{
+    input {
+        width: 845px;
+        margin-bottom: 20px;
+    }
+
+    .comment {
+        margin-bottom: 7px;
+        .username{
+            font-size: 1rem;
+            color: $strong_gray;
+        }
+        .message {
+            margin-left: 20px;
+        }
+    }
+}

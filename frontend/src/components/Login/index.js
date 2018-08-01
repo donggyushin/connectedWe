@@ -1,8 +1,7 @@
 import React from "react";
-import styles from "./style.scss";
+import styles from "./styles.scss";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
-import MessageModalContainer from "containers/MessageModalContainer";
 import FacebookLogin from "react-facebook-login";
 
 const cx = classNames.bind(styles);
@@ -12,7 +11,6 @@ const Login = ({
   password,
   onChange,
   handleSubmit,
-  errorMessage,
   responseFacebook
 }) => (
   <div className={cx("container")}>
@@ -38,18 +36,13 @@ const Login = ({
     <Link to="/signup" className={cx("newAccount")}>
       Don't you have account?
     </Link>
-    <FacebookLogin
+    {/*<FacebookLogin
       appId="293515351211880"
       autoLoad={true}
       fields="name,email,picture"
       callback={responseFacebook}
       cssClass={cx("facebookLink")}
-    />
-    {errorMessage !== "" && (
-      <div className={cx("message")}>
-        <MessageModalContainer />
-      </div>
-    )}
+    />*/}
   </div>
 );
 

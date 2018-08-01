@@ -1,20 +1,26 @@
 @import "utils";
 
+
+
+
+
+
+
 .container {
     width: 100%;
     display: flex;
     flex-direction: column;
-    
     align-items: center;
     background-color: #FAFAFA;
-}
-
-.private_container {
+   
+    .private_container {
     width: 100%;
     background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    
 }
 
 .switchContainer {
@@ -24,3 +30,14 @@
     flex-direction: column;
     justify-content: center;
 }
+.public_container {
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+}
+
+

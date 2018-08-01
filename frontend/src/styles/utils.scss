@@ -4,7 +4,34 @@
 
 $basic_width : 620px;
 $username_fontsize: 1.3rem;
-$name_fontsize: 0.7rem;
+$name_fontsize: 0.9rem;
+$text_logo: 2rem;
+$strong_gray: #808080;
+$max_width: 1200px;
+$red: #F30025;
+$max_height: 404px;
+$border: 1px solid black;
+$blue: #74B4E8;
+$pink:#FFBCD0;
+
+@mixin button {
+    width: 100px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 4px;
+    text-align: center;
+    color: white;
+    background-color: $blue;
+}
+
+@mixin border {
+    border: 1px solid black;
+}
+
+
+@mixin font{
+    font-family: 'Indie Flower', cursive;
+}
 
 @mixin place-at-center() {
     position: absolute;

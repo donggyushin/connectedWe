@@ -1,5 +1,6 @@
 @import "utils";
 
+
 .container {
     display: flex;
     justify-content: space-around;
@@ -56,4 +57,10 @@
         }
 
     }
+    .Link{
+        text-decoration: none;
+        color: #485057;
+    }
+   
 }
+ 

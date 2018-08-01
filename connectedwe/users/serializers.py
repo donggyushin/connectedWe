@@ -57,7 +57,8 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'username',
             'name',
-            'is_following'
+            'is_following',
+            'profile_image'
         )
 
     def get_is_following(self, obj):

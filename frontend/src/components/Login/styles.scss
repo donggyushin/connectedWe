@@ -1,0 +1,22 @@
+@import "utils";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    .textlog {
+        @include font;
+        font-size: $text_logo
+    }
+    .loginform {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .newAccount {
+        text-decoration: none;
+        color:black;
+    }
+}
