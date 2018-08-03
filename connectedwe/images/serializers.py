@@ -160,6 +160,8 @@ class LikeListSerializer(serializers.ModelSerializer):
 
 class EditImageSerializer(serializers.ModelSerializer):
     
+    hashtags = TagListSerializerField()
+    
     class Meta:
         model = models.Image
         fields= (
@@ -167,5 +169,6 @@ class EditImageSerializer(serializers.ModelSerializer):
             'caption',
             'location',
             'file',
+            'hashtags'
         )
 

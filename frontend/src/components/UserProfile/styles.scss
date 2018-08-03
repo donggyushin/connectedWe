@@ -1,0 +1,29 @@
+@import "utils";
+
+.Loading {
+    display: flex;
+    justify-content: center;
+}
+
+
+.container {
+    @include border;
+    .header{
+        .upper{
+            display: flex;
+            .profile{
+
+            }
+            .info {
+                display: flex;
+                flex-direction: column;
+            }
+        }   
+        .lower{
+
+        }
+    }
+    .body{
+
+    }
+}

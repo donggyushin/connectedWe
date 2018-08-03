@@ -1,0 +1,12 @@
+@import "utils";
+
+.container {
+    display: flex;
+    justify-content: center;
+    .ImageSearch{
+        width: 80%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

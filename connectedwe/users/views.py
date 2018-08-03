@@ -200,8 +200,9 @@ class SearchByUsername(APIView):
     def get(self, request, format=None):
         
         username = request.query_params.get("username")
-
+        
         users_to_find = models.User.objects.filter(username__istartswith=username)
+        
         serializered = image_serializers.BasicUserSerializer(users_to_find, many=True)
 
 
@@ -233,5 +234,15 @@ class PasswordView(APIView):
         
 
         return Response(status=status.HTTP_200_OK)
+
+class UserIdView(APIView):
+    
+    def get(self, request, format=None):
+        
+        me = request.user
+
+        serializered = serializers.UserIdSerializer(me)
+
+        return Response(data=serializered.data, status=status.HTTP_200_OK)
 
 

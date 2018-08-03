@@ -10,17 +10,11 @@ class ExploreContainer extends Component {
 
   componentDidMount() {
     const { apiSetUserExplore, userList } = this.props;
-    if (userList === null) {
-      apiSetUserExplore();
-    } else {
-      this.setState({
-        loading: false
-      });
-    }
+    apiSetUserExplore();
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.userList && nextProps.userList) {
+    if (nextProps.userList) {
       this.setState({
         loading: false
       });

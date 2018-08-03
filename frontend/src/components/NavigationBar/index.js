@@ -6,7 +6,15 @@ import * as FontAwesome from "react-icons/lib/fa";
 
 const cx = classNames.bind(styles);
 
-const NavigationBar = ({ clickLogoutButton, isLoggedIn }) => (
+const NavigationBar = ({
+  clickLogoutButton,
+  isLoggedIn,
+  handleInput,
+  handleSubmit,
+  value,
+  clickCameraIcon,
+  clickUserButton
+}) => (
   <div className={cx("container")}>
     <div className={cx("column")}>
       <div>
@@ -18,15 +26,30 @@ const NavigationBar = ({ clickLogoutButton, isLoggedIn }) => (
       </div>
     </div>
     <div className={cx("column")}>
-      <input placeholder="search" name="search" />
+      <input
+        placeholder="search"
+        name="search"
+        onChange={handleInput}
+        onKeyPress={handleSubmit}
+        value={value}
+      />
     </div>
     <div className={cx("column", "right")}>
       <div className={cx("icons")}>
+        <FontAwesome.FaCameraRetro
+          className={cx("icon", "camera")}
+          onClick={clickCameraIcon}
+        />
         <Link className={cx("Link")} to="/explore">
           <FontAwesome.FaSearch className={cx("icon")} />
         </Link>
         <FontAwesome.FaHeart className={cx("center", "icon")} />
-        <FontAwesome.FaUser className={cx("icon")} />
+        <Link className={cx("Link")} to="/profile">
+          <FontAwesome.FaUser
+            className={cx("icon")}
+            onClick={clickUserButton}
+          />
+        </Link>
         {isLoggedIn && <span onClick={clickLogoutButton}>logout</span>}
       </div>
     </div>

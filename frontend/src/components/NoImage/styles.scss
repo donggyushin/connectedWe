@@ -1,0 +1,11 @@
+@import "utils";
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    span {
+        font-size: $username_fontsize;
+        color: $strong_gray;
+    }
+}

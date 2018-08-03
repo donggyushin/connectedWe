@@ -5,15 +5,20 @@ import * as userActions from "store/modules/user";
 
 class AppContainer extends Component {
   componentDidMount() {
-    const { handle_loggedIn } = this.props;
+    const { handle_loggedIn, getMyId } = this.props;
     handle_loggedIn();
+    getMyId();
   }
 
   render() {
-    const { isLoggedIn, errorMessage } = this.props;
+    const { isLoggedIn, errorMessage, image_upload } = this.props;
     return (
       <div>
-        <App isLoggedIn={isLoggedIn} errorMessage={errorMessage} />
+        <App
+          isLoggedIn={isLoggedIn}
+          errorMessage={errorMessage}
+          image_upload={image_upload}
+        />
       </div>
     );
   }
@@ -21,11 +26,13 @@ class AppContainer extends Component {
 
 const mapStateToProps = state => ({
   isLoggedIn: state.user.isLoggedIn,
-  errorMessage: state.user.errorMessage
+  errorMessage: state.user.errorMessage,
+  image_upload: state.feed.image_upload
 });
 
 const mapDispatchToProps = dispatch => ({
-  handle_loggedIn: () => dispatch(userActions.handle_isLoggedIn())
+  handle_loggedIn: () => dispatch(userActions.handle_isLoggedIn()),
+  getMyId: () => dispatch(userActions.apiGetMyId())
 });
 
 export default connect(

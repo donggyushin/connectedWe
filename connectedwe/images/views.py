@@ -59,6 +59,7 @@ class ImageView(APIView):
         me = request.user
 
         image_to_upload = request.data
+        print(image_to_upload)
         serializered = serializers.EditImageSerializer(data=image_to_upload)
 
         if serializered.is_valid():

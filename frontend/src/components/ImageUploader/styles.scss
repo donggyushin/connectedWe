@@ -1,0 +1,74 @@
+@import "utils";
+
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .box{
+        width: 640px;
+        height: 670px;
+        background-color: white;
+        border-radius: 10px;
+
+        .header{
+            padding: 10px;
+            text-align: end;
+            span {
+                cursor: pointer;
+            }
+        }
+        .body{
+            padding: 10px;
+            .form{
+                .row{
+                    display: flex;
+                    margin-bottom: 15px;
+                    input {
+                        width: 380px;
+                        padding: 4px;
+                    }
+                    .title{
+                        font-size: $username_fontsize;
+                        color: $strong_gray;
+                        margin-bottom: 50px;
+                    }
+                    .description{
+                        width: 160px;
+                    }
+                    .caption {
+                        height: 266px;
+                        width: 380px;
+                        padding: 4px;
+                    }
+                    .column{
+                        display: flex;
+                        flex-direction: column;
+                        span {
+                            font-size: $name_fontsize;
+                            color: $strong_gray;
+                        }
+                    }
+                    
+                    
+                }
+                .button_container {
+                    text-align: end;
+
+                    button {
+                    @include button;
+                    margin-right: 50px;
+                    
+                }
+
+                }
+                
+            }
+        }
+    }
+}

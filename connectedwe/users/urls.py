@@ -17,6 +17,7 @@ urlpatterns = [
     path("followers/", views.GetFollowersList.as_view(), name="followerlist"),
     path("following/", views.GetFollowingList, name="followinglist"),
     path("search/", views.SearchByUsername.as_view(), name="searchByUsername"),
+    path("id/", views.UserIdView.as_view(), name="getMyUserId"),
     path("~redirect/", view=user_redirect_view, name="redirect"),
     path("~update/", view=user_update_view, name="update"),
     path("<str:username>/", view=user_detail_view, name="detail"),

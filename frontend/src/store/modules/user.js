@@ -15,8 +15,33 @@ const LOGOUT = "user/LOGOUT";
 const SETUSEREXPLORE = "user/SETUSEREXPLORE";
 const FOLLOW = "user/FOLLOW";
 const UNFOLLOW = "user/UNFOLLOW";
+const SETIMAGELIST = "user/SETIMAGELIST";
+const SETUSERLIST = "user/SETUSERLIST";
+const GETMYID = "user/GETMYID";
+const PROFILEVIEW = "user/PROFILEVIEW";
 
 //action creators
+
+export const profile_view = profile => ({
+  type: PROFILEVIEW,
+  profile
+});
+
+export const get_my_id = (id, username) => ({
+  type: GETMYID,
+  id,
+  username
+});
+
+export const set_user_list = userList => ({
+  type: SETUSERLIST,
+  userList
+});
+
+export const set_image_list = imageList => ({
+  type: SETIMAGELIST,
+  imageList
+});
 
 export const follow = user_id => ({
   type: FOLLOW,
@@ -56,13 +81,66 @@ export const logout = () => ({
 });
 //API actions
 
+export function searchByTerm(searchTerm) {
+  return async (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    const userList = await api_searchByUsername(searchTerm, token);
+    const imageList = await api_searchByHashtags(searchTerm, token);
+
+    if (userList === 400 || imageList === 400) {
+      dispatch(set_error_message("fail to get list"));
+      return;
+    }
+    dispatch(set_user_explore(userList));
+    dispatch(set_image_list(imageList));
+  };
+}
+
+export function api_searchByHashtags(hashtags, token) {
+  return fetch(`/images/search/?hashtags=${hashtags}`, {
+    method: "GET",
+    headers: headers(token)
+  })
+    .then(response => {
+      if (!response.ok) {
+        return 400;
+      }
+
+      return response.json();
+    })
+    .then(json => {
+      return json;
+    })
+    .catch(err => console.log(err));
+}
+
+export function api_searchByUsername(username, token) {
+  return fetch(`/users/search/?username=${username}`, {
+    method: "GET",
+    headers: headers(token)
+  })
+    .then(response => {
+      if (!response.ok) {
+        return 400;
+      }
+
+      return response.json();
+    })
+    .then(json => {
+      return json;
+    })
+    .catch(err => console.log(err));
+}
+
 export function api_follow(user_id) {
   return (dispatch, getState) => {
     dispatch(follow(user_id));
     const {
       user: { token }
     } = getState();
-    fetch(`users/${user_id}/follow/`, {
+    fetch(`/users/${user_id}/follow/`, {
       method: "POST",
       headers: headers(token)
     })
@@ -82,7 +160,7 @@ export function api_unfollow(user_id) {
       user: { token }
     } = getState();
     dispatch(unfollow(user_id));
-    fetch(`users/${user_id}/unfollow/`, {
+    fetch(`/users/${user_id}/unfollow/`, {
       method: "DELETE",
       headers: headers(token)
     })
@@ -119,6 +197,7 @@ export function username_login(username, password) {
         if (json.token) {
           dispatch(save_token(json.token));
           dispatch(handle_isLoggedIn());
+          dispatch(apiGetMyId());
         }
       })
       .catch(err => console.log(err));
@@ -173,6 +252,7 @@ export function loginwithfacebook(access_token) {
         if (json.token) {
           dispatch(save_token(json.token));
           dispatch(handle_isLoggedIn());
+          dispatch(apiGetMyId());
         }
       })
       .catch(err => console.log(err));
@@ -206,7 +286,7 @@ export function apiSetUserExplore() {
     const {
       user: { token }
     } = getState();
-    fetch(`users/explore/`, {
+    fetch(`/users/explore/`, {
       method: "GET",
       headers: headers(token)
     })
@@ -221,12 +301,56 @@ export function apiSetUserExplore() {
   };
 }
 
+export function apiGetMyId() {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    fetch(`/users/id/`, {
+      method: "GET",
+      headers: headers(token)
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(set_error_message("fail to get my id"));
+        }
+        return response.json();
+      })
+      .then(json => dispatch(get_my_id(json.id, json.username)))
+      .catch(err => console.log(err));
+  };
+}
+
+export function apiProfileView(user_id) {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    fetch(`/users/${user_id}/profile/`, {
+      method: "GET",
+      headers: headers(token)
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(set_error_message("fail to get profile"));
+        }
+        return response.json();
+      })
+      .then(json => dispatch(profile_view(json)))
+      .catch(err => console.log(err));
+  };
+}
+
 //initialState
 const initialState = {
   isLoggedIn: localStorage.getItem("jwt") ? true : false,
   token: localStorage.getItem("jwt"),
   errorMessage: "",
-  userList: null
+  userList: null,
+  imageList: null,
+  my_id: null,
+  my_username: null,
+  profile_view: null
 };
 
 //reducer
@@ -255,6 +379,14 @@ export default function reducer(state = initialState, action, getState) {
       return applyFollow(state, action);
     case UNFOLLOW:
       return applyUnfollow(state, action);
+    case SETIMAGELIST:
+      return applySetImageList(state, action);
+    case SETUSERLIST:
+      return applySetUserList2(state, action);
+    case GETMYID:
+      return applyGetMyId(state, action);
+    case PROFILEVIEW:
+      return applyProfileView(state, action);
 
     default:
       return state;
@@ -262,6 +394,39 @@ export default function reducer(state = initialState, action, getState) {
 }
 
 //reducer functions
+
+function applyProfileView(state, action) {
+  const { profile } = action;
+  return {
+    ...state,
+    profile_view: profile
+  };
+}
+
+function applyGetMyId(state, action) {
+  const { id, username } = action;
+  return {
+    ...state,
+    my_id: id,
+    my_username: username
+  };
+}
+
+function applySetUserList2(state, action) {
+  const { userList } = action;
+  return {
+    ...state,
+    userList: userList
+  };
+}
+
+function applySetImageList(state, action) {
+  const { imageList } = action;
+  return {
+    ...state,
+    imageList: imageList
+  };
+}
 
 function applyFollow(state, action) {
   const { user_id } = action;

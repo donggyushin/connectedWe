@@ -74,3 +74,13 @@ class UserSerializer(serializers.ModelSerializer):
                 return True 
 
         return False
+
+class UserIdSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        
+        model = models.User
+        fields = (
+            'id',
+            'username'
+        )

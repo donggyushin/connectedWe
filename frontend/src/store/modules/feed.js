@@ -1,5 +1,6 @@
 //import
 import * as userActions from "./user";
+import uuidv1 from "uuid/v1";
 
 //actions
 const SAVE_FEEDS = "feed/SAVE_FEEDS";
@@ -13,7 +14,24 @@ const SETLIKELIST = "feed/SETLIKELIST";
 const REMOVELIKELIST = "feed/REMOVELIKELIST";
 const UNFOLLOW = "feed/UNFOLLOW";
 const FOLLOW = "feed/FOLLOW";
+const DELETECOMMENT = "feed/DELETECOMMENT";
+const IMAGEUPLOADERON = "feed/IMAGEUPLOADERON";
+const IMAGEUPLOADERDOWN = "feed/IMAGEUPLOADERDOWN";
+
 //action creators
+
+export const image_upload_on = () => ({
+  type: IMAGEUPLOADERON
+});
+
+export const image_upload_down = () => ({
+  type: IMAGEUPLOADERDOWN
+});
+
+export const delete_comment = comment_id => ({
+  type: DELETECOMMENT,
+  comment_id
+});
 
 export const follow = user_id => ({
   type: FOLLOW,
@@ -69,13 +87,41 @@ export const clear_state = () => ({
 
 //api action creators
 
+export function uploadPhoto(formData) {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    return fetch(`/images/upload/`, {
+      method: "POST",
+      headers: {
+        Authorization: `JWT ${token}`
+      },
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(
+            userActions.set_error_message(
+              "fail to upload image. may forget to upload image? And you have to input one more hashtags!"
+            )
+          );
+        }
+        dispatch(getFeeds());
+        return response.json();
+      })
+
+      .catch(err => console.log(err));
+  };
+}
+
 export function unfollowUserApi(user_id) {
   return (dispatch, getState) => {
     const {
       user: { token }
     } = getState();
     dispatch(unfollow(user_id));
-    fetch(`users/${user_id}/unfollow/`, {
+    fetch(`/users/${user_id}/unfollow/`, {
       method: "DELETE",
       headers: {
         Authorization: `JWT ${token}`,
@@ -98,7 +144,7 @@ export function followUserApi(user_id) {
       user: { token }
     } = getState();
     dispatch(follow(user_id));
-    fetch(`users/${user_id}/follow/`, {
+    fetch(`/users/${user_id}/follow/`, {
       method: "POST",
       headers: {
         Authorization: `JWT ${token}`,
@@ -120,7 +166,7 @@ export function getLikeListApi(image_id) {
     const {
       user: { token }
     } = getState();
-    fetch(`images/${image_id}/like/list/`, {
+    fetch(`/images/${image_id}/like/list/`, {
       method: "GET",
       headers: {
         Authorization: `JWT ${token}`,
@@ -201,7 +247,7 @@ export function unlike_photo(image_id) {
     const {
       user: { token }
     } = getState();
-    fetch(`images/${image_id}/unlike/`, {
+    fetch(`/images/${image_id}/unlike/`, {
       method: "DELETE",
       headers: {
         Authorization: `JWT ${token}`,
@@ -254,7 +300,8 @@ export function add_comment_api(imageId, message) {
 const initialState = {
   feeds: null,
   no_feed: false,
-  like_list: null
+  like_list: null,
+  image_upload: false
 };
 
 //reducer
@@ -283,9 +330,46 @@ export default function reducer(state = initialState, action) {
       return applyUnfollowUser(state, action);
     case FOLLOW:
       return applyFollow(state, action);
+    case DELETECOMMENT:
+      return applyDeleteComment(state, action);
+    case IMAGEUPLOADERON:
+      return applyImageUploaderOn(state, action);
+    case IMAGEUPLOADERDOWN:
+      return applyImageUploaderDown(state, action);
     default:
       return state;
   }
+}
+
+function applyImageUploaderDown(state, action) {
+  return {
+    ...state,
+    image_upload: false
+  };
+}
+
+function applyImageUploaderOn(state, action) {
+  return {
+    ...state,
+    image_upload: true
+  };
+}
+
+function applyDeleteComment(state, action) {
+  const { comment_id } = action;
+  const { feeds } = state;
+  const updatedFeeds = feeds.map(feed => {
+    feed.comment_set.map(comment => {
+      if (comment.id === comment_id) {
+        return {};
+      }
+      return comment;
+    });
+  });
+  return {
+    ...state,
+    feeds: updatedFeeds
+  };
 }
 
 function applyFollow(state, action) {
