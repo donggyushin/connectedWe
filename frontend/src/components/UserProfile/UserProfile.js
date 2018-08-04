@@ -19,7 +19,11 @@ const UserProfile = ({
   images_count,
   myid,
   edit,
-  toggleEditState
+  toggleEditState,
+  handleInputChange,
+
+  value_bio,
+  value_website
 }) => {
   if (loading) {
     return (
@@ -34,17 +38,19 @@ const UserProfile = ({
           <div className={cx("upper")}>
             <div className={cx("profile")}>
               {edit ? (
-                <input type="file" />
+                <input
+                  type="file"
+                  name="profile_image"
+                  onChange={handleInputChange}
+                />
               ) : (
                 <img src={profile_image || require("media/nobody.png")} />
               )}
             </div>
             <div className={cx("info")}>
-              <span className={cx("username")}>
-                {edit ? <input name="username" value={username} /> : username}
-              </span>
+              <span className={cx("username")}>{username}</span>
               <span className={cx("name")}>
-                {edit ? <input name="name" value={name} /> : name || "name"}
+                {name || "name"}
 
                 {myid === id && edit ? (
                   <div onClick={toggleEditState} className={cx("Edit")}>
@@ -57,17 +63,30 @@ const UserProfile = ({
                 )}
               </span>
               <span className={cx("bio")}>
-                {edit ? <input name="bid" value={bio} /> : bio || "bio"}
+                {edit ? (
+                  <input
+                    onChange={handleInputChange}
+                    name="bio"
+                    placeholder={bio}
+                    value={value_bio}
+                  />
+                ) : (
+                  bio || "bio"
+                )}
               </span>
-              <a href={website}>
-                <span className={cx("website")}>
-                  {edit ? (
-                    <input name="website" value={website} />
-                  ) : (
-                    website || "website"
-                  )}
-                </span>
-              </a>
+
+              <span className={cx("website")}>
+                {edit ? (
+                  <input
+                    name="website"
+                    onChange={handleInputChange}
+                    placeholder={website}
+                    value={value_website}
+                  />
+                ) : (
+                  <a href={website}>{website}</a> || "website"
+                )}
+              </span>
             </div>
           </div>
           <hr />

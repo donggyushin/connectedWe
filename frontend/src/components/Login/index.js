@@ -36,13 +36,13 @@ const Login = ({
     <Link to="/signup" className={cx("newAccount")}>
       Don't you have account?
     </Link>
-    {/*<FacebookLogin
+    <FacebookLogin
       appId="293515351211880"
       autoLoad={true}
       fields="name,email,picture"
       callback={responseFacebook}
       cssClass={cx("facebookLink")}
-    />*/}
+    />
   </div>
 );
 

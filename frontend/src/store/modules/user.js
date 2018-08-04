@@ -19,8 +19,18 @@ const SETIMAGELIST = "user/SETIMAGELIST";
 const SETUSERLIST = "user/SETUSERLIST";
 const GETMYID = "user/GETMYID";
 const PROFILEVIEW = "user/PROFILEVIEW";
+const EDITPROFILE = "user/EDITPROFILE";
 
 //action creators
+
+export const editProfileAction = (bio, website, profile_image, id) => ({
+  type: EDITPROFILE,
+
+  bio,
+  website,
+  profile_image,
+  id
+});
 
 export const profile_view = profile => ({
   type: PROFILEVIEW,
@@ -341,6 +351,34 @@ export function apiProfileView(user_id) {
   };
 }
 
+export function edit_profile(data, user_id) {
+  return (dispatch, getState) => {
+    const {
+      user: { token }
+    } = getState();
+    fetch(`/users/${user_id}/edit/`, {
+      method: "PUT",
+      headers: {
+        Authorization: `JWT ${token}`
+      },
+      body: data
+    })
+      .then(response => {
+        if (!response.ok) {
+          dispatch(set_error_message("fail to edit profile!"));
+        }
+        return response.json();
+      })
+      .then(json => {
+        console.log(json);
+        dispatch(
+          editProfileAction(json.bio, json.website, json.profile_image, json.id)
+        );
+      })
+      .catch(err => console.log(err));
+  };
+}
+
 //initialState
 const initialState = {
   isLoggedIn: localStorage.getItem("jwt") ? true : false,
@@ -388,12 +426,30 @@ export default function reducer(state = initialState, action, getState) {
     case PROFILEVIEW:
       return applyProfileView(state, action);
 
+    case EDITPROFILE:
+      return applyEditProfile(state, action);
+
     default:
       return state;
   }
 }
 
 //reducer functions
+
+function applyEditProfile(state, action) {
+  const { bio, website, profile_image } = action;
+
+  return {
+    ...state,
+    profile_view: {
+      ...state.profile_view,
+
+      bio,
+      website,
+      profile_image
+    }
+  };
+}
 
 function applyProfileView(state, action) {
   const { profile } = action;
