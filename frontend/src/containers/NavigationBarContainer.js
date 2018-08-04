@@ -35,10 +35,6 @@ class NavigationBarContainer extends Component {
     image_upload_on();
   };
 
-  _clickUserButton = () => {
-    const { apiProfileView, my_id } = this.props;
-    apiProfileView(my_id);
-  };
   render() {
     const { isLoggedIn } = this.props;
     const { term } = this.state;
@@ -50,7 +46,6 @@ class NavigationBarContainer extends Component {
         handleSubmit={this._handleSubmit}
         value={term}
         clickCameraIcon={this._clickCameraIcon}
-        clickUserButton={this._clickUserButton}
       />
     );
   }
@@ -63,8 +58,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   logoutAction: () => dispatch(userActions.logoutApiAction()),
-  image_upload_on: () => dispatch(feedActions.image_upload_on()),
-  apiProfileView: id => dispatch(userActions.apiProfileView(id))
+  image_upload_on: () => dispatch(feedActions.image_upload_on())
 });
 
 export default connect(

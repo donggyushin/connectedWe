@@ -90,7 +90,7 @@ export const clear_state = () => ({
 export function uploadPhoto(formData) {
   return (dispatch, getState) => {
     const {
-      user: { token }
+      user: { token, my_id }
     } = getState();
     return fetch(`/images/upload/`, {
       method: "POST",
@@ -108,6 +108,7 @@ export function uploadPhoto(formData) {
           );
         }
         dispatch(getFeeds());
+        dispatch(userActions.apiProfileView(my_id));
         return response.json();
       })
 

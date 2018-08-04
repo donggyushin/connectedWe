@@ -12,8 +12,7 @@ const NavigationBar = ({
   handleInput,
   handleSubmit,
   value,
-  clickCameraIcon,
-  clickUserButton
+  clickCameraIcon
 }) => (
   <div className={cx("container")}>
     <div className={cx("column")}>
@@ -45,10 +44,7 @@ const NavigationBar = ({
         </Link>
         <FontAwesome.FaHeart className={cx("center", "icon")} />
         <Link className={cx("Link")} to="/profile">
-          <FontAwesome.FaUser
-            className={cx("icon")}
-            onClick={clickUserButton}
-          />
+          <FontAwesome.FaUser className={cx("icon")} />
         </Link>
         {isLoggedIn && <span onClick={clickLogoutButton}>logout</span>}
       </div>
