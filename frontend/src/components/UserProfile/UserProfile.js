@@ -9,7 +9,8 @@ const UserProfile = ({
   loading,
   id,
   username,
-  name,
+  first_name,
+  last_name,
   bio,
   website,
   profile_image,
@@ -21,7 +22,8 @@ const UserProfile = ({
   edit,
   toggleEditState,
   handleInputChange,
-
+  value_firstname,
+  value_lastname,
   value_bio,
   value_website
 }) => {
@@ -50,7 +52,24 @@ const UserProfile = ({
             <div className={cx("info")}>
               <span className={cx("username")}>{username}</span>
               <span className={cx("name")}>
-                {name || "name"}
+                {edit ? (
+                  <div>
+                    <input
+                      name="last_name"
+                      placeholder="last name"
+                      onChange={handleInputChange}
+                      value={value_lastname}
+                    />{" "}
+                    <input
+                      name="first_name"
+                      onChange={handleInputChange}
+                      placeholder="first name"
+                      value={value_firstname}
+                    />
+                  </div>
+                ) : (
+                  last_name + " " + first_name || "name"
+                )}
 
                 {myid === id && edit ? (
                   <div onClick={toggleEditState} className={cx("Edit")}>
@@ -67,7 +86,7 @@ const UserProfile = ({
                   <input
                     onChange={handleInputChange}
                     name="bio"
-                    placeholder={bio}
+                    placeholder="bio"
                     value={value_bio}
                   />
                 ) : (
@@ -80,11 +99,13 @@ const UserProfile = ({
                   <input
                     name="website"
                     onChange={handleInputChange}
-                    placeholder={website}
+                    placeholder="Please input valid url. if not, you can't submit"
                     value={value_website}
                   />
+                ) : website ? (
+                  <a href={website}>{website}</a>
                 ) : (
-                  <a href={website}>{website}</a> || "website"
+                  "website"
                 )}
               </span>
             </div>

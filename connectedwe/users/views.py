@@ -160,12 +160,16 @@ class ProfileView(APIView):
             
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+        print(request.data)
+
         serializered = serializers.EditUserProfileSerializer(me, data=request.data, partial=True)
 
         if serializered.is_valid():
             
             serializered.save()
         else :
+            
+            print(serializered.errors)
             
             return Response(data=serializered.errors, status=status.HTTP_400_BAD_REQUEST)
 

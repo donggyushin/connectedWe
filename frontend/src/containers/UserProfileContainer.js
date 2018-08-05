@@ -9,7 +9,8 @@ class UserProfileContainer extends Component {
   state = {
     loading: true,
     edit: false,
-
+    first_name: "",
+    last_name: "",
     bio: "",
     website: ""
   };
@@ -17,13 +18,12 @@ class UserProfileContainer extends Component {
   _handleInputChange = e => {
     const value = e.target.value;
     const name = e.target.name;
-    console.log(value);
-    console.log(name);
     if (name === "bio") {
       this.setState({
         ...this.state,
         bio: value
       });
+      data.append("bio", value);
     } else if (e.target.name === "profile_image") {
       data.append("profile_image", e.target.files[0]);
     } else if (name === "website") {
@@ -31,18 +31,30 @@ class UserProfileContainer extends Component {
         ...this.state,
         website: value
       });
+      data.append("website", value);
+    } else if (name === "last_name") {
+      this.setState({
+        ...this.state,
+        last_name: value
+      });
+    } else if (name === "first_name") {
+      this.setState({
+        ...this.state,
+        first_name: value
+      });
     }
   };
 
   _toggleEditState = nextState => {
-    const { bio, website } = this.state;
-    const { edit_profile, myid } = this.props;
+    const { first_name, last_name } = this.state;
+    const {
+      edit_profile_api,
+      myid,
+      profile_view: { username }
+    } = this.props;
 
     if (this.state.edit && !nextState.edit) {
-      data.append("bio", bio);
-      data.append("website", website);
-
-      edit_profile(data, myid);
+      edit_profile_api(data, myid, first_name, last_name, username);
     }
 
     this.setState({
@@ -65,14 +77,21 @@ class UserProfileContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.profile_view) {
+      const {
+        profile_view: { bio, first_name, last_name, website }
+      } = nextProps;
       this.setState({
         ...this.state,
-        loading: false
+        loading: false,
+        bio,
+        first_name,
+        last_name,
+        website
       });
     }
   }
   render() {
-    const { loading, edit, bio, website } = this.state;
+    const { loading, edit, bio, website, first_name, last_name } = this.state;
     const { profile_view, myid } = this.props;
 
     return (
@@ -85,6 +104,8 @@ class UserProfileContainer extends Component {
         handleInputChange={this._handleInputChange}
         value_bio={bio}
         value_website={website}
+        value_firstname={first_name}
+        value_lastname={last_name}
       />
     );
   }
@@ -97,7 +118,16 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   getProfileView: id => dispatch(userActions.apiProfileView(id)),
-  edit_profile: (data, id) => dispatch(userActions.edit_profile(data, id))
+  edit_profile_api: (data, user_id, first_name, last_name, username) =>
+    dispatch(
+      userActions.edit_profile_api(
+        data,
+        user_id,
+        first_name,
+        last_name,
+        username
+      )
+    )
 });
 
 export default connect(

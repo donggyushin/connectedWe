@@ -31,7 +31,7 @@ class ImageView(APIView):
                 following_images.append(following_users_image)
 
 
-        user_images = user.image_set.all()[:5]
+        user_images = user.image_set.all()[:10]
 
         for user_image in user_images:
 

@@ -20,8 +20,15 @@ const SETUSERLIST = "user/SETUSERLIST";
 const GETMYID = "user/GETMYID";
 const PROFILEVIEW = "user/PROFILEVIEW";
 const EDITPROFILE = "user/EDITPROFILE";
+const EDITNAME = "user/EDITNAME";
 
 //action creators
+
+export const edit_name = (first_name, last_name) => ({
+  type: EDITNAME,
+  first_name,
+  last_name
+});
 
 export const editProfileAction = (bio, website, profile_image, id) => ({
   type: EDITPROFILE,
@@ -351,32 +358,84 @@ export function apiProfileView(user_id) {
   };
 }
 
-export function edit_profile(data, user_id) {
-  return (dispatch, getState) => {
+export function edit_profile_api(
+  data,
+  user_id,
+  first_name,
+  last_name,
+  username
+) {
+  return async (dispatch, getState) => {
     const {
       user: { token }
     } = getState();
-    fetch(`/users/${user_id}/edit/`, {
-      method: "PUT",
-      headers: {
-        Authorization: `JWT ${token}`
-      },
-      body: data
-    })
-      .then(response => {
-        if (!response.ok) {
-          dispatch(set_error_message("fail to edit profile!"));
-        }
-        return response.json();
-      })
-      .then(json => {
-        console.log(json);
-        dispatch(
-          editProfileAction(json.bio, json.website, json.profile_image, json.id)
-        );
-      })
-      .catch(err => console.log(err));
+    const updatedName = await edit_name_api(
+      username,
+      first_name,
+      last_name,
+      token
+    );
+    const updatedProfile = await edit_profile(data, user_id, token);
+    if (updatedName === 400 || updatedProfile === 400) {
+      dispatch(
+        set_error_message(
+          "fail to edit profile, Please check wheather your website url is valid or not."
+        )
+      );
+    }
+
+    console.log(updatedProfile);
+    dispatch(edit_name(updatedName.first_name, updatedName.last_name));
+    dispatch(
+      editProfileAction(
+        updatedProfile.bio,
+        updatedProfile.website,
+        updatedProfile.profile_image,
+        updatedProfile.id
+      )
+    );
   };
+}
+
+export function edit_profile(data, user_id, token) {
+  return fetch(`/users/${user_id}/edit/`, {
+    method: "PUT",
+    headers: {
+      Authorization: `JWT ${token}`
+    },
+    body: data
+  })
+    .then(response => {
+      if (!response.ok) {
+        return 400;
+      }
+      return response.json();
+    })
+    .then(json => json)
+    .catch(err => console.log(err));
+}
+
+export function edit_name_api(username, first_name, last_name, token) {
+  return fetch(`/rest-auth/user/`, {
+    method: "PUT",
+    headers: {
+      Authorization: `JWT ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username: username,
+      first_name: first_name,
+      last_name: last_name
+    })
+  })
+    .then(response => {
+      if (!response.ok) {
+        return 400;
+      }
+      return response.json();
+    })
+    .then(json => json)
+    .catch(err => console.log(err));
 }
 
 //initialState
@@ -429,12 +488,27 @@ export default function reducer(state = initialState, action, getState) {
     case EDITPROFILE:
       return applyEditProfile(state, action);
 
+    case EDITNAME:
+      return applyEditName(state, action);
+
     default:
       return state;
   }
 }
 
 //reducer functions
+
+function applyEditName(state, action) {
+  const { first_name, last_name } = action;
+  return {
+    ...state,
+    profile_view: {
+      ...state.profile_view,
+      first_name,
+      last_name
+    }
+  };
+}
 
 function applyEditProfile(state, action) {
   const { bio, website, profile_image } = action;

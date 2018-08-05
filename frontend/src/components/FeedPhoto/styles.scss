@@ -43,15 +43,22 @@
 .action_container{
     display: flex;
     align-items: center;
+     margin: 10px;
     .liked {
         color: $red;
+        margin-right: 5px;
+    }
+    .icon {
+        color: $strong_gray;
+        margin-right: 5px;
     }
     .likecounter{
         cursor: pointer;
+        margin-right: 5px;
     }
  
     .counter {
-        margin: 10px;
+       
         
     }
 }

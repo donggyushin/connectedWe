@@ -23,6 +23,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'id',
             'username',
             'name',
+            'first_name',
+            'last_name',
             'bio',
             'website',
             'profile_image',
