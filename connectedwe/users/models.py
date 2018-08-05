@@ -28,7 +28,10 @@ class User(AbstractUser):
     password2 = models.CharField(_("password2"), max_length=50, null=True)
     #image_set
 
-
+    @property
+    def notification_count(self):
+        
+        return self.to_set.all().count()
 
     @property
     def following_count(self):

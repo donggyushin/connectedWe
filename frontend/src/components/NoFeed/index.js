@@ -2,10 +2,11 @@ import React from "react";
 import styles from "./style.scss";
 import classNames from "classnames/bind";
 import * as FontAwesome from "react-icons/lib/fa";
+import ImageUploaderContainer from "containers/ImageUploaderContainer";
 
 const cx = classNames.bind(styles);
 
-const NoFeed = () => (
+const NoFeed = ({ imageUploader, turn_on_uploader }) => (
   <div className={cx("mom")}>
     <div className={cx("arrow")}>
       <FontAwesome.FaLongArrowRight className={cx("icon")} />
@@ -28,7 +29,10 @@ const NoFeed = () => (
         </span>
       </div>
     </div>
-    <div className={cx("firstButton")}>launch your first feed</div>
+    <div onClick={turn_on_uploader} className={cx("firstButton")}>
+      launch your first feed
+    </div>
+    {imageUploader && <ImageUploaderContainer />}
   </div>
 );
 

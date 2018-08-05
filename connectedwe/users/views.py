@@ -249,4 +249,12 @@ class UserIdView(APIView):
 
         return Response(data=serializered.data, status=status.HTTP_200_OK)
 
+class NotificationView(APIView):
+    
+    def get(self, request, format=None):
+        
+        me = request.user
 
+        serializered = serializers.NotificationCountSerializer(me)
+
+        return Response(data=serializered.data, status=status.HTTP_200_OK)

@@ -86,3 +86,13 @@ class UserIdSerializer(serializers.ModelSerializer):
             'id',
             'username'
         )
+
+class NotificationCountSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = models.User
+        fields = (
+            'id',
+            'notification_count'
+        )

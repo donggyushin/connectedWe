@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as userActions from "store/modules/user";
 import * as feedActions from "store/modules/feed";
+import * as notificationActions from "store/modules/notification";
 import NavigationBar from "components/NavigationBar";
 import { withRouter } from "react-router-dom";
 
@@ -35,8 +36,13 @@ class NavigationBarContainer extends Component {
     image_upload_on();
   };
 
+  componentDidMount() {
+    const { get_notification_count } = this.props;
+    get_notification_count();
+  }
+
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, notification_count } = this.props;
     const { term } = this.state;
     return (
       <NavigationBar
@@ -46,6 +52,7 @@ class NavigationBarContainer extends Component {
         handleSubmit={this._handleSubmit}
         value={term}
         clickCameraIcon={this._clickCameraIcon}
+        notification_count={notification_count}
       />
     );
   }
@@ -53,12 +60,15 @@ class NavigationBarContainer extends Component {
 
 const mapStateToProps = state => ({
   isLoggedIn: state.user.isLoggedIn,
-  my_id: state.user.my_id
+  my_id: state.user.my_id,
+  notification_count: state.notification.notification_count
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   logoutAction: () => dispatch(userActions.logoutApiAction()),
-  image_upload_on: () => dispatch(feedActions.image_upload_on())
+  image_upload_on: () => dispatch(feedActions.image_upload_on()),
+  get_notification_count: () =>
+    dispatch(notificationActions.api_getNotification())
 });
 
 export default connect(
