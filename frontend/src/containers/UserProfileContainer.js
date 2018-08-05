@@ -64,19 +64,13 @@ class UserProfileContainer extends Component {
   };
 
   componentDidMount() {
-    const { getProfileView, myid, profile_view } = this.props;
-    if (!profile_view) {
-      getProfileView(myid);
-    } else {
-      this.setState({
-        ...this.state,
-        loading: false
-      });
-    }
+    const { clear_profile, getProfileView } = this.props;
+    clear_profile();
+    getProfileView(this.props.myid);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.profile_view) {
+    if (!this.props.profile_view && nextProps.profile_view) {
       const {
         profile_view: { bio, first_name, last_name, website }
       } = nextProps;
@@ -127,7 +121,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         last_name,
         username
       )
-    )
+    ),
+  clear_profile: () => dispatch(userActions.clear_profile())
 });
 
 export default connect(

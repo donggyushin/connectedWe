@@ -3,6 +3,7 @@ import styles from "./styles.scss";
 import classNames from "classnames/bind";
 import * as FontAwesome from "react-icons/lib/fa";
 import UserListContainer from "containers/UserListContainer";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +29,8 @@ const FeedPhoto = props => {
     unlike_photo,
     press_enter,
     userListBoolean,
-    toggleUserListBoolean
+    toggleUserListBoolean,
+    clickUsername
   } = props;
   return (
     <div className={cx("container")}>
@@ -37,6 +39,8 @@ const FeedPhoto = props => {
         naturalTime={naturalTime}
         username={creator.username}
         name={creator.name}
+        clickUsername={clickUsername}
+        id={creator.id}
       />
       <PhotoImage
         file={file}
@@ -62,20 +66,32 @@ const FeedPhoto = props => {
           handleInput={handleInput}
           id={id}
           press_enter={press_enter}
+          clickUsername={clickUsername}
         />
       )}
     </div>
   );
 };
 
-const PhotoHeader = ({ file, naturalTime, username, name }) => {
+const PhotoHeader = ({
+  file,
+  naturalTime,
+  username,
+  name,
+  clickUsername,
+  id
+}) => {
   return (
     <div className={cx("header_container")}>
       <div className={cx("photo")}>
         <img src={file || require("media/nobody.png")} />
       </div>
       <div className={cx("username_name_naturaltime")}>
-        <div className={cx("row")}>{username}</div>
+        <Link to="/other/profile" style={{ textDecoration: "none" }}>
+          <div className={cx("row")} onClick={() => clickUsername(id)}>
+            {username}
+          </div>
+        </Link>
         <div className={cx("row2")}>{name || "name"}</div>
         <div className={cx("row2")}>{naturalTime}</div>
       </div>
@@ -149,7 +165,8 @@ const CommentContainer = ({
   comments,
   comment_value,
   handleInput,
-  press_enter
+  press_enter,
+  clickUsername
 }) => (
   <div className={cx("comment_container")}>
     <input
@@ -162,15 +179,21 @@ const CommentContainer = ({
       <Comment
         username={comment.creator.username}
         key={comment.id}
+        id={comment.creator.id}
         message={comment.message}
+        clickUsername={clickUsername}
       />
     ))}
   </div>
 );
 
-const Comment = ({ username, message }) => (
+const Comment = ({ username, message, clickUsername, id }) => (
   <div className={cx("comment")}>
-    <span className={cx("username")}>{username}</span>
+    <Link to="/other/profile" style={{ textDecoration: "none" }}>
+      <span className={cx("username")} onClick={() => clickUsername(id)}>
+        {username}
+      </span>
+    </Link>
     <span className={cx("message")}>{message}</span>
   </div>
 );

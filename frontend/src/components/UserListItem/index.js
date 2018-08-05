@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./styles.scss";
 import classNames from "classnames/bind";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -9,7 +10,9 @@ const UserListItem = ({
   creator: { username, name, profile_image },
   is_following,
   clickFollowButton,
-  clickUnfollowButton
+  clickUnfollowButton,
+  clickUsername,
+  creator
 }) => (
   <div className={cx("container")}>
     <div className={cx("profile_photo")}>
@@ -20,7 +23,14 @@ const UserListItem = ({
       />
     </div>
     <div className={cx("information")}>
-      <span className={cx("username")}>{username}</span>
+      <Link to="/other/profile" style={{ textDecoration: "none" }}>
+        <span
+          className={cx("username")}
+          onClick={() => clickUsername(creator.id)}
+        >
+          {username}
+        </span>
+      </Link>
       <span className={cx("name")}>{name || "secret"}</span>
     </div>
     <div className={cx("follow")}>

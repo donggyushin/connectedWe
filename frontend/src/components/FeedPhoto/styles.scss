@@ -14,6 +14,8 @@
     .username_name_naturaltime{
         .row{
             font-size: $username_fontsize;
+            cursor: pointer;
+            color: black;
         }
         .row2{
             font-size: $name_fontsize;
@@ -67,13 +69,16 @@
     input {
         width: 845px;
         margin-bottom: 20px;
+        padding: 4px;
     }
 
     .comment {
         margin-bottom: 7px;
         .username{
-            font-size: 1rem;
+            font-size: $username_fontsize;
             color: $strong_gray;
+            cursor: pointer;
+            
         }
         .message {
             margin-left: 20px;

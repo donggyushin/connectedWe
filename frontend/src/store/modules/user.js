@@ -21,8 +21,13 @@ const GETMYID = "user/GETMYID";
 const PROFILEVIEW = "user/PROFILEVIEW";
 const EDITPROFILE = "user/EDITPROFILE";
 const EDITNAME = "user/EDITNAME";
+const CLEARPROFILE = "user/CLEARPROFILE";
 
 //action creators
+
+export const clear_profile = () => ({
+  type: CLEARPROFILE
+});
 
 export const edit_name = (first_name, last_name) => ({
   type: EDITNAME,
@@ -490,13 +495,21 @@ export default function reducer(state = initialState, action, getState) {
 
     case EDITNAME:
       return applyEditName(state, action);
-
+    case CLEARPROFILE:
+      return applyClearProfile(state, action);
     default:
       return state;
   }
 }
 
 //reducer functions
+
+function applyClearProfile(state, action) {
+  return {
+    ...state,
+    profile_view: null
+  };
+}
 
 function applyEditName(state, action) {
   const { first_name, last_name } = action;

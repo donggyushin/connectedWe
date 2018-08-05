@@ -27,6 +27,7 @@ const UserProfile = ({
   value_bio,
   value_website
 }) => {
+  console.log("myid: " + myid + " id: " + id);
   if (loading) {
     return (
       <div className={cx("Loading")}>
@@ -70,7 +71,6 @@ const UserProfile = ({
                 ) : (
                   last_name + " " + first_name || "name"
                 )}
-
                 {myid === id && edit ? (
                   <div onClick={toggleEditState} className={cx("Edit")}>
                     Submit

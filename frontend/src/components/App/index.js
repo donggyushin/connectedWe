@@ -11,6 +11,7 @@ import MessageModalContainer from "containers/MessageModalContainer";
 import SearchContainer from "containers/SearchContainer";
 import ImageUploaderContainer from "containers/ImageUploaderContainer";
 import UserProfileContainer from "containers/UserProfileContainer";
+import OtherProfileContainer from "containers/OtherProfileContainer";
 
 // Create an enhanced history that syncs navigation events with the store
 
@@ -58,6 +59,7 @@ const PrivateComponent = ({ image_upload }) => {
           <Route path="/explore" component={ExploreContainer} />
           <Route path="/search/:searchTerm" component={SearchContainer} />
           <Route path="/profile" component={UserProfileContainer} />
+          <Route path="/other/profile" component={OtherProfileContainer} />
           <Route component={FeedContainer} />
         </Switch>
       </div>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import FeedPhoto from "components/FeedPhoto";
 import * as feedActions from "store/modules/feed";
+import * as userActions from "store/modules/user";
 
 class FeedPhotoContainer extends Component {
   state = {
@@ -56,6 +57,11 @@ class FeedPhotoContainer extends Component {
     }
   };
 
+  _clickUsername = user_id => {
+    const { getUserProfileView } = this.props;
+    getUserProfileView(user_id);
+  };
+
   render() {
     const { comment_visiable, comment_value, userListBoolean } = this.state;
     return (
@@ -70,19 +76,25 @@ class FeedPhotoContainer extends Component {
         press_enter={this._press_enter}
         userListBoolean={userListBoolean}
         toggleUserListBoolean={this._toggleUserListBoolean}
+        clickUsername={this._clickUsername}
       />
     );
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  profile_view: state.user.profile_view
+});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   like_photo: () => dispatch(feedActions.like_photo(ownProps.id)),
   unlike_photo: () => dispatch(feedActions.unlike_photo(ownProps.id)),
   add_comment_api: message =>
     dispatch(feedActions.add_comment_api(ownProps.id, message)),
-  getLikeListApi: () => dispatch(feedActions.getLikeListApi())
+  getLikeListApi: () => dispatch(feedActions.getLikeListApi()),
+  getUserProfileView: user_id => {
+    dispatch(userActions.apiProfileView(user_id));
+  }
 });
 
 export default connect(
