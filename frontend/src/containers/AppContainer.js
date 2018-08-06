@@ -11,13 +11,19 @@ class AppContainer extends Component {
   }
 
   render() {
-    const { isLoggedIn, errorMessage, image_upload } = this.props;
+    const {
+      isLoggedIn,
+      errorMessage,
+      image_upload,
+      notification_on
+    } = this.props;
     return (
       <div>
         <App
           isLoggedIn={isLoggedIn}
           errorMessage={errorMessage}
           image_upload={image_upload}
+          notification_on={notification_on}
         />
       </div>
     );
@@ -27,7 +33,8 @@ class AppContainer extends Component {
 const mapStateToProps = state => ({
   isLoggedIn: state.user.isLoggedIn,
   errorMessage: state.user.errorMessage,
-  image_upload: state.feed.image_upload
+  image_upload: state.feed.image_upload,
+  notification_on: state.notification.notification_on
 });
 
 const mapDispatchToProps = dispatch => ({

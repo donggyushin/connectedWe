@@ -192,8 +192,8 @@ class DeleteCommentOnMyImage(APIView):
     def delete(self, request,comment_id ,format=None):
         
         me = request.user
-        
 
+        
         comment = models.Comment.objects.get(id=comment_id)
         ImageFound = comment.image
         

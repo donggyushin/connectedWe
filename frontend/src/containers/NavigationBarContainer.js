@@ -36,6 +36,12 @@ class NavigationBarContainer extends Component {
     image_upload_on();
   };
 
+  _clickHeartIcon = () => {
+    const { notification_on, getNotifications } = this.props;
+    notification_on();
+    getNotifications();
+  };
+
   componentDidMount() {
     const { get_notification_count } = this.props;
     get_notification_count();
@@ -53,6 +59,7 @@ class NavigationBarContainer extends Component {
         value={term}
         clickCameraIcon={this._clickCameraIcon}
         notification_count={notification_count}
+        clickHeartIcon={this._clickHeartIcon}
       />
     );
   }
@@ -68,7 +75,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   logoutAction: () => dispatch(userActions.logoutApiAction()),
   image_upload_on: () => dispatch(feedActions.image_upload_on()),
   get_notification_count: () =>
-    dispatch(notificationActions.api_getNotification())
+    dispatch(notificationActions.api_getNotification()),
+  notification_on: () => dispatch(notificationActions.notificationOn()),
+  getNotifications: () => dispatch(notificationActions.notifications())
 });
 
 export default connect(

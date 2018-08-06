@@ -19,6 +19,14 @@ class NotificationsView(APIView):
 
         return Response(data=serializered.data,status=status.HTTP_200_OK)
 
+    def delete(self, request, fotmat=None):
+        
+        me = request.user
+        notifications = models.Notification.objects.filter(to=me)
+        notifications.delete()
+
+        return Response(status=status.HTTP_200_OK)
+
 
 def create_notifications(creator, to, notification_type, image = None):
 

@@ -255,6 +255,10 @@ class NotificationView(APIView):
         
         me = request.user
 
+        
+
         serializered = serializers.NotificationCountSerializer(me)
+
+        print(serializered.data)
 
         return Response(data=serializered.data, status=status.HTTP_200_OK)

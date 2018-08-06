@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from . import models
 from connectedwe.images import models as image_models
+from connectedwe.users import models as user_models
 
 class SingleImageSerializer(serializers.ModelSerializer):
     
@@ -12,10 +13,24 @@ class SingleImageSerializer(serializers.ModelSerializer):
             'file'
         )
 
+class CreatorNameSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        
+        model = user_models.User
+        fields = (
+            'id',
+            'username'
+        )
+
+
+
 
 class NotificationsSerializer(serializers.ModelSerializer):
     
     image = SingleImageSerializer()
+    creator = CreatorNameSerializer()
+    to = CreatorNameSerializer()
 
     class Meta:
 
@@ -24,5 +39,6 @@ class NotificationsSerializer(serializers.ModelSerializer):
             'id',
             'creator',
             'to',
-            'image'
+            'image',
+            'notification_types'
         )

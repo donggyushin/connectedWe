@@ -12,16 +12,20 @@ import SearchContainer from "containers/SearchContainer";
 import ImageUploaderContainer from "containers/ImageUploaderContainer";
 import UserProfileContainer from "containers/UserProfileContainer";
 import OtherProfileContainer from "containers/OtherProfileContainer";
+import NotificationContainer from "containers/NotificationContainer";
 
 // Create an enhanced history that syncs navigation events with the store
 
 const cx = classNames.bind(styles);
 
-const App = ({ isLoggedIn, errorMessage, image_upload }) => {
+const App = ({ isLoggedIn, errorMessage, image_upload, notification_on }) => {
   return (
     <div className={cx("container")}>
       {isLoggedIn ? (
-        <PrivateComponent image_upload={image_upload} />
+        <PrivateComponent
+          image_upload={image_upload}
+          notification_on={notification_on}
+        />
       ) : (
         <PublicComponent />
       )}
@@ -48,12 +52,13 @@ const PublicComponent = () => {
   );
 };
 
-const PrivateComponent = ({ image_upload }) => {
+const PrivateComponent = ({ image_upload, notification_on }) => {
   return (
     <Router>
       <div className={cx("private_container")}>
         <NavigationBarContainer />
         {image_upload && <ImageUploaderContainer />}
+        {notification_on && <NotificationContainer />}
         <Switch className={cx("switchContainer")}>
           <Route exact path="/" component={FeedContainer} />
           <Route path="/explore" component={ExploreContainer} />
